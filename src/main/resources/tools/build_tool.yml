@@ -1,0 +1,14 @@
+restricted-worlds:
+    - "example"
+restricted-regions:
+    - "example"
+item:
+    item-type: stick
+    name: "<aqua><bold>Build Tool</bold></aqua>"
+    lore:
+        - "<gray>Selected Material:</gray> <white><material></white>"
+        - "<gray>Position 1:</gray> <green><world1> <x1> <y1> <z1></green>"
+        - "<gray>Position 2:</gray> <aqua><world2> <x2> <y2> <z2></aqua>"
+    options:
+        enchantment-glint: true
+        fire-resistant: true

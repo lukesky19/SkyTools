@@ -1,0 +1,12 @@
+restricted-worlds:
+    - "example"
+restricted-regions:
+    - "example"
+item:
+    item-type: blaze_rod
+    name: "<yellow><bold>Mob Capture Tool</bold></yellow>"
+    lore:
+        - "<dark_purple><bold>Uses</bold></dark_purple> <gray><uses></gray>"
+    options:
+        enchantment-glint: true
+        fire-resistant: true

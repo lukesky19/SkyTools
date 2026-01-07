@@ -1,0 +1,23 @@
+name: SkyTools
+version: '${version}'
+main: com.github.lukesky19.skyTools.core.SkyTools
+api-version: '1.21'
+depend: [SkyLib]
+soft-depend: [BentoBox, ItemsAdder, RoseStacker, SkyHoppers, SkyShop, WorldGuard]
+
+permissions:
+    skytools.commands.skytools:
+        description: Permission to use the /skytools command.
+        default: op
+    skytools.commands.skytools.reload:
+        description: Permission to use the /skytools reload command.
+        default: op
+    skytools.commands.skytools.help:
+        description: Permission to use the /skytools help command.
+        default: op
+    skytools.commands.skytools.build_tool:
+        description: Permission to use the /skytools build_tool <player> command.
+        default: op
+    skytools.commands.skytools.mob_capture_tool:
+        description: Permission to use the /skytools mob_capture_tool <player> [uses] command.
+        default: op

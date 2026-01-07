@@ -1,0 +1,8 @@
+config-version: 1.0.0.0
+locale: en_US
+# This is how frequently the block placement queue is processed.
+# 1 tick = 0.05 seconds
+# 20 ticks = 1 second
+placement-frequency-ticks: 1
+# This is how many block placements can occur each time the queue is processed.
+placements-per-run: 500
