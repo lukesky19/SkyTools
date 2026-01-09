@@ -46,7 +46,6 @@ public class BuildToolCommand {
         return Commands.literal("build_tool")
                 .requires(ctx -> ctx.getSender().hasPermission("skytools.commands.skytools.build_tool"))
                 .then(Commands.argument("player", ArgumentTypes.player())
-                        .requires(ctx -> ctx.getSender().hasPermission("skytools.commands.skytools.build_tool.others"))
                         .executes(ctx -> {
                             Locale locale = localeManager.getConfiguration();
                             CommandSender sender = ctx.getSource().getSender();

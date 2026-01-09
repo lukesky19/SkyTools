@@ -64,7 +64,6 @@ public class MobCaptureToolCommand {
         return Commands.literal("mob_capture_tool")
                 .requires(ctx -> ctx.getSender().hasPermission("skytools.commands.skytools.mob_capture_tool"))
                 .then(Commands.argument("player", ArgumentTypes.player())
-                        .requires(ctx -> ctx.getSender().hasPermission("skytools.commands.skytools.mob_capture_tool.others"))
                         .then(Commands.argument("uses", IntegerArgumentType.integer(-1, Integer.MAX_VALUE))
                                 .executes(ctx -> {
                                     Locale locale = localeManager.getConfiguration();
