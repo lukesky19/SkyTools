@@ -21,7 +21,6 @@ import com.github.lukesky19.skyTools.buildTool.configuration.BuildToolConfig;
 import com.github.lukesky19.skyTools.buildTool.configuration.BuildToolConfigurationManager;
 import com.github.lukesky19.skyTools.buildTool.tool.BuildTool;
 import com.github.lukesky19.skyTools.buildTool.tool.BuildToolManager;
-import com.github.lukesky19.skyTools.buildTool.util.PluginUtils;
 import com.github.lukesky19.skyTools.core.configuration.data.Locale;
 import com.github.lukesky19.skyTools.core.configuration.manager.LocaleManager;
 import com.github.lukesky19.skyTools.core.integration.HookManager;
@@ -106,22 +105,28 @@ public class BuildToolListener implements Listener {
         @NotNull Locale locale = localeManager.getConfiguration();
         if(action.isLeftClick()) {
             if(player.isSneaking()) {
-                if(buildTool.getPosition1() == null) {
-                    player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().positionOneInvalid()));
-                    return;
-                }
-                if(buildTool.getPosition2() == null) {
-                    player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().positionTwoInvalid()));
-                    return;
-                }
+                BuildTool.BuildToolResult buildToolResult = buildTool.build(player);
+                switch(buildToolResult) {
+                    case POSITION_1_NOT_SET -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().positionOneInvalid()));
 
-                if(buildTool.build(player)) {
-                    player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().buildQueued()));
-                } else {
-                    player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().noAccess()));
+                    case POSITION_2_NOT_SET -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().positionTwoInvalid()));
+
+                    case POSITIONS_DIFFERENT_WORLDS -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().positionsDifferentWorlds()));
+
+                    case MATERIAL_NOT_SET -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().materialNotSet()));
+
+                    case PLAYER_LACKS_MATERIALS -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().playerLacksMaterials()));
+
+                    case BUILD_TOOL_CONFIG_INVALID -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().configError()));
+
+                    case WORLD_NOT_ALLOWED -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().worldNotAllowed()));
+
+                    case NO_LOCATIONS_FOUND -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().noLocationsFound()));
+
+                    case BUILD_QUEUED -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().buildQueued()));
                 }
             } else {
-                if(PluginUtils.isLocationDisallowed(hookManager.getHook(WorldGuardHook.class), buildToolConfig.restrictedWorlds(), buildToolConfig.restrictedRegions(), location)) {
+                if(isLocationDisallowed(hookManager.getHook(WorldGuardHook.class), buildToolConfig.restrictedWorlds(), buildToolConfig.restrictedRegions(), location)) {
                     player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().noAccess()));
                     return;
                 }
@@ -140,22 +145,28 @@ public class BuildToolListener implements Listener {
             }
         } else if(action.isRightClick()) {
             if(player.isSneaking()) {
-                if(buildTool.getPosition1() == null) {
-                    player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().positionOneInvalid()));
-                    return;
-                }
-                if(buildTool.getPosition2() == null) {
-                    player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().positionTwoInvalid()));
-                    return;
-                }
+                BuildTool.BuildToolResult buildToolResult = buildTool.build(player);
+                switch(buildToolResult) {
+                    case POSITION_1_NOT_SET -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().positionOneInvalid()));
 
-                if(buildTool.build(player)) {
-                    player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().buildQueued()));
-                } else {
-                    player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().noAccess()));
+                    case POSITION_2_NOT_SET -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().positionTwoInvalid()));
+
+                    case POSITIONS_DIFFERENT_WORLDS -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().positionsDifferentWorlds()));
+
+                    case MATERIAL_NOT_SET -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().materialNotSet()));
+
+                    case PLAYER_LACKS_MATERIALS -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().playerLacksMaterials()));
+
+                    case BUILD_TOOL_CONFIG_INVALID -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().configError()));
+
+                    case WORLD_NOT_ALLOWED -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().worldNotAllowed()));
+
+                    case NO_LOCATIONS_FOUND -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().noLocationsFound()));
+
+                    case BUILD_QUEUED -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().buildQueued()));
                 }
             } else {
-                if(PluginUtils.isLocationDisallowed(hookManager.getHook(WorldGuardHook.class), buildToolConfig.restrictedWorlds(), buildToolConfig.restrictedRegions(), location)) {
+                if(isLocationDisallowed(hookManager.getHook(WorldGuardHook.class), buildToolConfig.restrictedWorlds(), buildToolConfig.restrictedRegions(), location)) {
                     player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().noAccess()));
                     return;
                 }
@@ -201,5 +212,33 @@ public class BuildToolListener implements Listener {
         buildTool.setMaterial(cursorItemStack.getType());
 
         buildTool.saveTool();
+    }
+
+    /**
+     * Is a location not allowed based on the regions it is in?
+     * @param worldGuardHook A {@link WorldGuardHook} instance.
+     * @param disallowedWorlds A {@link List} of disallowed world names as a {@link String}.
+     * @param disallowedRegions A {@link List} of disallowed region names as a {@link String}.
+     * @param location The {@link Location}.
+     * @return true if disallowed, false if allowed.
+     */
+    private boolean isLocationDisallowed(
+            @NotNull WorldGuardHook worldGuardHook,
+            @NotNull List<String> disallowedWorlds,
+            @NotNull List<String> disallowedRegions,
+            @NotNull Location location) {
+        if(disallowedWorlds.contains(location.getWorld().getName())) return true;
+
+        if(worldGuardHook.isHooked()) {
+            List<String> effectiveRegions = worldGuardHook.getRegionNames(location);
+
+            for(String regionName : disallowedRegions) {
+                if(effectiveRegions.contains(regionName)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

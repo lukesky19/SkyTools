@@ -110,6 +110,11 @@ public class LocaleManager extends SimpleConfigManager<Locale> {
                 || configuration.buildTool().configError()  == null
                 || configuration.buildTool().positionOneInvalid()  == null
                 || configuration.buildTool().positionTwoInvalid()  == null
+                || configuration.buildTool().positionsDifferentWorlds() == null
+                || configuration.buildTool().materialNotSet() == null
+                || configuration.buildTool().playerLacksMaterials() == null
+                || configuration.buildTool().worldNotAllowed() == null
+                || configuration.buildTool().noLocationsFound() == null
                 || configuration.buildTool().setPositionOne()  == null
                 || configuration.buildTool().setPositionTwo()  == null
                 || configuration.buildTool().noAccess()  == null
@@ -153,6 +158,11 @@ public class LocaleManager extends SimpleConfigManager<Locale> {
                         "<red>Unable to create or update the build tool due to a configuration error.</red>",
                         "<red>Position 1 is not set.</red>",
                         "<red>Position 2 is not set.</red>",
+                        "<red>The two positions must be set in the same world.</red>",
+                        "<red>No material selected.</red>",
+                        "<red>Your inventory doesn't contain any items of the selected material.</red>",
+                        "<red>The build tool is not allowed in this world.</red>",
+                        "<red>No valid locations found to place blocks at.</red>",
                         "<#2FC211>Set position 1 to <world> <x> <y> <z>.</#2FC211>",
                         "<#2FC211>Set position 2 to <world> <x> <y> <z>.</#2FC211>",
                         "<red>You do not have access to use the build tool here.</red>",

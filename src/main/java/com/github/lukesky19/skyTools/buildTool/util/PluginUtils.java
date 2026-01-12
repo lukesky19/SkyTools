@@ -133,34 +133,6 @@ public class PluginUtils {
     /**
      * Is a location not allowed based on the regions it is in?
      * @param worldGuardHook A {@link WorldGuardHook} instance.
-     * @param disallowedWorlds A {@link List} of disallowed world names as a {@link String}.
-     * @param disallowedRegions A {@link List} of disallowed region names as a {@link String}.
-     * @param location The {@link Location}.
-     * @return true if disallowed, false if allowed.
-     */
-    public static boolean isLocationDisallowed(
-            @NotNull WorldGuardHook worldGuardHook,
-            @NotNull List<String> disallowedWorlds,
-            @NotNull List<String> disallowedRegions,
-            @NotNull Location location) {
-        if(disallowedWorlds.contains(location.getWorld().getName())) return true;
-
-        if(worldGuardHook.isHooked()) {
-            List<String> effectiveRegions = worldGuardHook.getRegionNames(location);
-
-            for(String regionName : disallowedRegions) {
-                if(effectiveRegions.contains(regionName)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Is a location not allowed based on the regions it is in?
-     * @param worldGuardHook A {@link WorldGuardHook} instance.
      * @param disallowedRegions A {@link List} of disallowed region names as a {@link String}.
      * @param location The {@link Location}.
      * @return true if disallowed, false if allowed.

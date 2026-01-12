@@ -46,6 +46,11 @@ public record Locale(
      * @param configError The message sent to the player when a build tool cannot be created or updated due to a config error.
      * @param positionOneInvalid The message sent to the player when position 1 is invalid.
      * @param positionTwoInvalid The message sent to the player when position 2 is invalid.
+     * @param positionsDifferentWorlds The message sent to the player when the two positions are in different worlds.
+     * @param materialNotSet The message sent to the player when the material isn't set.
+     * @param playerLacksMaterials The message sent to the player when their inventory doesn't have any items of the selected material.
+     * @param worldNotAllowed The message sent to the player when the world isn't allowed.
+     * @param noLocationsFound The message sent when no valid locations were found to place blocks at.
      * @param setPositionOne The message sent to the player when position 1 is set.
      * @param setPositionTwo The message sent to the player when position 2 is set.
      * @param buildQueued The message sent to the player when a build is queued.
@@ -58,6 +63,11 @@ public record Locale(
             String configError,
             String positionOneInvalid,
             String positionTwoInvalid,
+            String positionsDifferentWorlds,
+            String materialNotSet,
+            String playerLacksMaterials,
+            String worldNotAllowed,
+            String noLocationsFound,
             String setPositionOne,
             String setPositionTwo,
             String noAccess,
@@ -66,7 +76,7 @@ public record Locale(
      * The locale messages for the mob capture tool.
      * @param toolGiven The message sent to the command executor who give a player a mob capture tool.
      * @param playerToolGiven The message sent to the player who receives a mob capture tool.
-     * @param toolUsedUp The message sent tot he player when their mob capture tool runs out of uses.
+     * @param toolUsedUp The message sent to the player when their mob capture tool runs out of uses.
      * @param configError The message sent to the player when a mob capture tool cannot be created or updated due to a config error.
      * @param noAccess The message sent when the player doesn't have access to use the mob capture tool.
      */

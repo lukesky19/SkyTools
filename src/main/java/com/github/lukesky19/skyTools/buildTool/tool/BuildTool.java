@@ -291,21 +291,65 @@ public class BuildTool extends Tool {
     /**
      * Queue block placement for the selected area.
      * @param player The {@link Player} that initiated the build.
-     * @return true if a build is queued, false if not.
+     * @return The {@link BuildToolResult}.
      */
-    public boolean build(@NotNull Player player) {
-        if(position1 == null || position2 == null) return false;
-        if(!position1.getWorld().getName().equals(position2.getWorld().getName())) return false;
-        if(material == null) return false;
+    public @NotNull BuildToolResult build(@NotNull Player player) {
+        if(position1 == null) return BuildToolResult.POSITION_1_NOT_SET;
+        if(position2 == null) return BuildToolResult.POSITION_2_NOT_SET;
+        if(!position1.getWorld().getName().equals(position2.getWorld().getName())) return BuildToolResult.POSITIONS_DIFFERENT_WORLDS;
+        if(material == null) return BuildToolResult.MATERIAL_NOT_SET;
+        if(!player.getInventory().contains(material)) return BuildToolResult.PLAYER_LACKS_MATERIALS;
         @Nullable BuildToolConfig buildToolConfig = buildToolConfigurationManager.getConfiguration();
-        if(buildToolConfig == null) return false;
-        if(buildToolConfig.restrictedWorlds().contains(position1.getWorld().getName())) return false;
+        if(buildToolConfig == null) return BuildToolResult.BUILD_TOOL_CONFIG_INVALID;
+        if(buildToolConfig.restrictedWorlds().contains(position1.getWorld().getName())) return BuildToolResult.WORLD_NOT_ALLOWED;
 
         List<Location> locationList = getLocationsInArea(hookManager.getHook(WorldGuardHook.class), buildToolConfig.restrictedRegions(), position1, position2);
-        if(locationList.isEmpty()) return false;
+        if(locationList.isEmpty()) return BuildToolResult.NO_LOCATIONS_FOUND;
 
         blockPlacementQueueManager.queuePlacementData(new PlacementData(player, material, locationList));
 
-        return true;
+        return BuildToolResult.BUILD_QUEUED;
+    }
+
+    /**
+     * This enum contains the result of the build tool being used.
+     */
+    public enum BuildToolResult {
+        /**
+         * Position 1 isn't set.
+         */
+        POSITION_1_NOT_SET,
+        /**
+         * Position 2 isn't set.
+         */
+        POSITION_2_NOT_SET,
+        /**
+         * Positions are in different worlds.
+         */
+        POSITIONS_DIFFERENT_WORLDS,
+        /**
+         * The material isn't set.
+         */
+        MATERIAL_NOT_SET,
+        /**
+         * The player's inventory doesn't contain any items of the selected material
+         */
+        PLAYER_LACKS_MATERIALS,
+        /**
+         * Invalid build tool config.
+         */
+        BUILD_TOOL_CONFIG_INVALID,
+        /**
+         * The build tool isn't allowed in this world.
+         */
+        WORLD_NOT_ALLOWED,
+        /**
+         * No locations found to place blocks.
+         */
+        NO_LOCATIONS_FOUND,
+        /**
+         * The build was queued.
+         */
+        BUILD_QUEUED
     }
 }
