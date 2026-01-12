@@ -18,19 +18,33 @@
 package com.github.lukesky19.skyTools.mobTool.util;
 
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mob;
 
 /**
- * This enum contains the {@link NamespacedKey}s used for the mob capture tool.
+ * This enum contains the {@link NamespacedKey}s used for the custom spawn eggs created by the mob capture tool.
  */
-public enum MobToolKeys {
+public enum SpawnEggKeys {
     /**
-     * This is for the key that identifies a mob capture tool.
+     * This is for the key that identifies a spawn egg from the mob capture tool.
      */
-    MOB_CAPTURE_TOOL,
+    CUSTOM_SPAWN_EGG,
     /**
-     * This is for the key that identifies how many uses a mob capture tool has.
+     * This is for the key that identifies whether the living entity's AI status {@link LivingEntity#hasAI()} before being captured.
      */
-    USES;
+    AI_STATUS,
+    /**
+     * This is for the key that identifies whether the mob's aware status {@link Mob#isAware()} before being captured.
+     */
+    AWARE_STATUS,
+    /**
+     * The amount of mobs captured.
+     */
+    ROSESTACKER_STACK_SIZE,
+    /**
+     * This is for the key that identifies a special namespaced id to use with ItemsAdder.
+     */
+    ITEMSADDER_NAMESPACED_ID;
 
     /**
      * The {@link NamespacedKey} for the enum.
@@ -40,7 +54,7 @@ public enum MobToolKeys {
     /**
      * Constructor
      */
-    MobToolKeys() {
+    SpawnEggKeys() {
         this.key = new NamespacedKey("skytools", this.name().toLowerCase());
     }
 

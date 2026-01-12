@@ -27,6 +27,7 @@ import com.github.lukesky19.skyTools.core.integration.impl.RoseStackerHook;
 import com.github.lukesky19.skyTools.mobTool.configuration.MobCaptureToolConfig;
 import com.github.lukesky19.skyTools.mobTool.configuration.MobCaptureToolConfigurationManager;
 import com.github.lukesky19.skyTools.mobTool.util.MobToolKeys;
+import com.github.lukesky19.skyTools.mobTool.util.SpawnEggKeys;
 import com.github.lukesky19.skylib.api.adventure.AdventureUtil;
 import com.github.lukesky19.skylib.api.itemstack.ItemStackBuilder;
 import com.github.lukesky19.skylib.api.player.PlayerUtil;
@@ -208,7 +209,7 @@ public class MobCaptureTool extends Tool {
      */
     public void captureEntity(@NotNull Entity entity) {
         // Only allow capture of mobs
-        if(!(entity instanceof Mob)) return;
+        if(!(entity instanceof Mob mob)) return;
         @NotNull Locale locale = localeManager.getConfiguration();
 
         // Only allow capture if the player can interact with entities
@@ -218,7 +219,7 @@ public class MobCaptureTool extends Tool {
         }
 
         // Get the spawn egg
-        ItemStack spawnEgg = getSpawnEgg(entity);
+        ItemStack spawnEgg = getSpawnEgg(mob);
         // If null, return
         if(spawnEgg == null) return;
 
@@ -250,36 +251,37 @@ public class MobCaptureTool extends Tool {
     /**
      * Get the spawn egg {@link ItemStack} for the entity.
      * @apiNote This will remove the entity if successful.
-     * @param entity The {@link Entity}.
+     * @param entity The {@link LivingEntity}.
      * @return The {@link ItemStack} or null.
      */
-    private @Nullable ItemStack getSpawnEgg(
-            @NotNull Entity entity) {
+    private @Nullable ItemStack getSpawnEgg(@NotNull LivingEntity entity) {
         RoseStackerHook roseStackerHook = hookManager.getHook(RoseStackerHook.class);
         ItemsAdderHook itemsAdderHook = hookManager.getHook(ItemsAdderHook.class);
 
-        // The amount of mobs in the stack
-        int stackSize = roseStackerHook.getStackSize(entity); // Will return 1 if RoseStacker isn't hooked so a isHooked check isn't required.
-
         // Get the EntityType
         EntityType entityType = entity.getType();
+
+        // Get the entity's AI Status
+        boolean ai = entity.hasAI();
+        boolean aware = !(entity instanceof Mob mob) || mob.isAware();
 
         // Get the custom entity name or the default name
         @Nullable Component entityNameComponent = entity.customName();
         @NotNull String entityNameString = entityNameComponent != null ? AdventureUtil.serialize(entityNameComponent) : entity.getName();
 
-        // Get the namespaced id for the entity (if any)
+        // The amount of mobs in the stack
+        // Will return 1 if RoseStacker isn't hooked so a isHooked check isn't required.
+        int stackSize = roseStackerHook.getStackSize(entity);
+
+        // ItemAdders - Get the namespaced id for the entity (if any)
         @Nullable String namespacedId = null;
         if(itemsAdderHook.isHooked()) {
             namespacedId = itemsAdderHook.getCustomEntityNamespaceId(entity);
         }
 
-        // Attempt to get the ItemStack for a spawn egg
+        // Attempt to get the ItemStack for the spawn egg
         @Nullable ItemStack itemStack;
-        if(roseStackerHook.isHooked() && stackSize > 1) {
-            // Use RoseStacker's method as a base if a stacked entity
-            itemStack = roseStackerHook.getSpawnEgg(entityType, stackSize);
-        } else if(namespacedId != null) {
+        if(namespacedId != null) {
             // Use ItemsAdderHook to attempt to get the custom spawn egg by the entity's namespaced id
             itemStack = itemsAdderHook.getCustomItem(namespacedId);
 
@@ -318,13 +320,20 @@ public class MobCaptureTool extends Tool {
                 AdventureUtil.deserialize("<gray>Entity Type: </gray>" + entityType.toString().toLowerCase()),
                 AdventureUtil.deserialize("<gray>Entity Name: </gray>" + entityNameString),
                 AdventureUtil.deserialize("<gray>Custom: </gray>" + (namespacedId != null)),
+                AdventureUtil.deserialize("<gray>Has AI: </gray>" + (ai && aware)),
                 AdventureUtil.deserialize("<gray>Amount: " + stackSize));
         itemMeta.lore(lore);
 
         // Store custom data
         PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
+
+        persistentDataContainer.set(SpawnEggKeys.CUSTOM_SPAWN_EGG.getKey(), PersistentDataType.INTEGER, 1);
+        persistentDataContainer.set(SpawnEggKeys.AI_STATUS.getKey(), PersistentDataType.BOOLEAN, ai);
+        persistentDataContainer.set(SpawnEggKeys.AWARE_STATUS.getKey(), PersistentDataType.BOOLEAN, aware);
+        persistentDataContainer.set(SpawnEggKeys.ROSESTACKER_STACK_SIZE.getKey(), PersistentDataType.INTEGER, stackSize);
+
         if(namespacedId != null) {
-            persistentDataContainer.set(MobToolKeys.ITEMSADDER_NAMESPACED_ID.getKey(), PersistentDataType.STRING, namespacedId);
+            persistentDataContainer.set(SpawnEggKeys.ITEMSADDER_NAMESPACED_ID.getKey(), PersistentDataType.STRING, namespacedId);
         }
 
         // Set the item meta

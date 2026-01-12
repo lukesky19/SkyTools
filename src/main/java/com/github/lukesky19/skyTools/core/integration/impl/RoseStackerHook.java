@@ -148,14 +148,16 @@ public class RoseStackerHook implements Hook {
     }
 
     /**
-     * Get an {@link ItemStack} spawn egg for the entity type and amount.
-     * @param entityType The {@link EntityType}.
-     * @param amount The amount of entities.
-     * @return An {@link ItemStack} or null of rosestacker is not hooked into.
+     * Get the existing stacked entity or create a new one.
+     * @param entity The {@link LivingEntity}.
+     * @return A {@link StackedEntity} or null.
      */
-    public @Nullable ItemStack getSpawnEgg(@NotNull EntityType entityType, int amount) {
+    public @Nullable StackedEntity getStackedEntity(@NotNull LivingEntity entity) {
         if(roseStackerAPI == null) return null;
 
-        return ItemUtils.getEntityAsStackedItemStack(entityType, amount);
+        @Nullable StackedEntity existingStackedEntity = roseStackerAPI.getStackedEntity(entity);
+        if(existingStackedEntity != null) return existingStackedEntity;
+
+        return roseStackerAPI.createEntityStack(entity, false);
     }
 }

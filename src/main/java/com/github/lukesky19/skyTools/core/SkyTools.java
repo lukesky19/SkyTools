@@ -93,8 +93,7 @@ public final class SkyTools extends SkyPlugin {
         if(hookManager.getHook(SkyShopHook.class).isHooked()) {
             pluginManager.registerEvents(new ItemSoldListener(buildToolManager, mobCaptureToolManager), this);
         }
-        pluginManager.registerEvents(new MobSpawnListener(hookManager), this);
-
+        pluginManager.registerEvents(new MobSpawnListener(mobCaptureToolManager, hookManager), this);
 
         // Reload the plugin
         reload();

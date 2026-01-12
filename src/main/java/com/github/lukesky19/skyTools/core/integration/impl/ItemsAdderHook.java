@@ -72,14 +72,14 @@ public class ItemsAdderHook implements Hook {
      * Attempt to spawn a custom entity at the location using the namespace id and entity name provided.
      * @param location The {@link Location} to spawn the entity at.
      * @param namespacedId The namespaced id as a {@link String}.
-     * @return true if spawned, false if not.
+     * @return The {@link CustomEntity} or null.
      */
-    public boolean spawnCustomEntity(
+    public @Nullable CustomEntity spawnCustomEntity(
             @NotNull Location location,
             @NotNull String namespacedId) {
-        if(!hooked) return false;
+        if(!hooked) return null;
 
-        return CustomEntity.spawn(namespacedId, location) != null;
+        return CustomEntity.spawn(namespacedId, location);
     }
 
     /**

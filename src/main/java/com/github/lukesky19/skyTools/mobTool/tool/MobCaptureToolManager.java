@@ -23,6 +23,7 @@ import com.github.lukesky19.skyTools.core.integration.HookManager;
 import com.github.lukesky19.skyTools.core.integration.ProtectionManager;
 import com.github.lukesky19.skyTools.mobTool.configuration.MobCaptureToolConfigurationManager;
 import com.github.lukesky19.skyTools.mobTool.util.MobToolKeys;
+import com.github.lukesky19.skyTools.mobTool.util.SpawnEggKeys;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
@@ -99,5 +100,18 @@ public class MobCaptureToolManager {
         PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
 
         return pdc.has(MobToolKeys.MOB_CAPTURE_TOOL.getKey());
+    }
+
+    /**
+     * Is the {@link ItemStack} a custom spawn egg created by the mob capture tool?
+     * @param itemStack The {@link ItemStack}.
+     * @return true if a custom spawn egg, or false if not.
+     */
+    public boolean isCustomSpawnEgg(@NotNull ItemStack itemStack) {
+        @Nullable ItemMeta itemMeta = itemStack.getItemMeta();
+        if(itemMeta == null) return false;
+        PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
+
+        return pdc.has(SpawnEggKeys.CUSTOM_SPAWN_EGG.getKey()) || pdc.has(SpawnEggKeys.ITEMSADDER_NAMESPACED_ID.getKey());
     }
 }
