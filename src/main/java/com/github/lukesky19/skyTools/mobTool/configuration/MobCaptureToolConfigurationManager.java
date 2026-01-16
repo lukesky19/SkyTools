@@ -51,7 +51,7 @@ public class MobCaptureToolConfigurationManager extends SimpleConfigManager<MobC
      * @return The {@link MobCaptureToolConfig}.
      */
     @Override
-    protected @Nullable MobCaptureToolConfig migrateConfiguration(@NotNull MobCaptureToolConfig buildToolConfig) {
+    public @Nullable MobCaptureToolConfig migrateConfiguration(@NotNull MobCaptureToolConfig buildToolConfig) {
         return buildToolConfig;
     }
 
@@ -60,7 +60,7 @@ public class MobCaptureToolConfigurationManager extends SimpleConfigManager<MobC
      * @return Always returns true.
      */
     @Override
-    protected boolean validateConfiguration() {
+    public boolean validateConfiguration(MobCaptureToolConfig mobCaptureToolConfig) {
         return true;
     }
 }

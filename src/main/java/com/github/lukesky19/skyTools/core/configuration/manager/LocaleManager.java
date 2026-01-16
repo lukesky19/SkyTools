@@ -99,7 +99,7 @@ public class LocaleManager extends SimpleConfigManager<Locale> {
      * Validates if the locale is missing any strings.
      */
     @Override
-    public boolean validateConfiguration() {
+    public boolean validateConfiguration(@Nullable Locale configuration) {
         if(configuration == null) return false;
 
         if(configuration.configVersion()  == null
@@ -124,7 +124,7 @@ public class LocaleManager extends SimpleConfigManager<Locale> {
                 || configuration.mobCaptureTool().toolUsedUp() == null
                 || configuration.mobCaptureTool().configError()  == null
                 || configuration.mobCaptureTool().noAccess()  == null) {
-            configuration = null;
+            this.configuration = null;
 
             logger.error(AdventureUtil.deserialize("Your locale is missing one of the plugin's messages. The default locale will be used."));
             logger.info(AdventureUtil.deserialize("You can regenerate your locale file by deleting it or adding the missing messages to resolve the issue."));

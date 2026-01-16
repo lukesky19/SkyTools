@@ -51,7 +51,7 @@ public class BuildToolConfigurationManager extends SimpleConfigManager<BuildTool
      * @return The {@link BuildToolConfig}.
      */
     @Override
-    protected @Nullable BuildToolConfig migrateConfiguration(@NotNull BuildToolConfig buildToolConfig) {
+    public @Nullable BuildToolConfig migrateConfiguration(@NotNull BuildToolConfig buildToolConfig) {
         return buildToolConfig;
     }
 
@@ -60,7 +60,7 @@ public class BuildToolConfigurationManager extends SimpleConfigManager<BuildTool
      * @return Always returns true.
      */
     @Override
-    protected boolean validateConfiguration() {
+    public boolean validateConfiguration(@Nullable BuildToolConfig buildToolConfig) {
         return true;
     }
 }
