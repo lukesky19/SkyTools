@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.github.lukesky19"
-version = "0.1.1.2"
+version = "0.1.2.0"
 
 repositories {
     mavenCentral()
@@ -26,7 +26,7 @@ dependencies {
     compileOnly("dev.rosewood:rosestacker:1.5.37")
     compileOnly("dev.lone:api-itemsadder:4.0.10")
     compileOnly("com.github.lukesky19:SkyHoppers:1.2.0.0")
-    compileOnly("com.github.lukesky19:SkyShop:2.1.0.0")
+    compileOnly("com.github.lukesky19:SkyShop:3.0.0.0")
 }
 
 java {
