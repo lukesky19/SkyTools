@@ -123,6 +123,7 @@ public class LocaleManager extends SimpleConfigManager<Locale> {
                 || configuration.mobCaptureTool().playerToolGiven() == null
                 || configuration.mobCaptureTool().toolUsedUp() == null
                 || configuration.mobCaptureTool().configError()  == null
+                || configuration.mobCaptureTool().worldNotAllowed() == null
                 || configuration.mobCaptureTool().noAccess()  == null) {
             this.configuration = null;
 
@@ -171,7 +172,8 @@ public class LocaleManager extends SimpleConfigManager<Locale> {
                         "<#2FC211>You have been given a mob capture tool.</#2FC211>",
                         "<#2FC211>Gave player <white><player></white> a mob capture tool.</#2FC211>",
                         "<dark_purple>POOF!</dark_purple> <#2FC211>Your mob capture tool ran out of uses.</#2FC211>",
-                        "<red>Unable to create or update the mob capture tool due to a configuration error.</red>",
+                        "<red>Unable to create, use, or update the mob capture tool due to a configuration error.</red>",
+                        "<red>The mob capture tool is not allowed in this world.</red>",
                         "<red>You do not have access to use the mob capture tool here.</red>"));
     }
 }

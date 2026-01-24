@@ -28,5 +28,6 @@ mob-capture-tool:
     tool-given: "<#2FC211>You have been given a mob capture tool.</#2FC211>"
     player-tool-given: "<#2FC211>Gave player <white><player></white> a mob capture tool.</#2FC211>"
     tool-used-up: "<dark_purple>POOF!</dark_purple> <#2FC211>Your mob capture tool ran out of uses.</#2FC211>"
-    config-error: "<red>Unable to create or update the mob capture tool due to a configuration error.</red>"
+    config-error: "<red>Unable to create, use, or update the mob capture tool due to a configuration error.</red>"
+    world-not-allowed: "<red>The mob capture tool is not allowed in this world.</red>"
     no-access: "<red>You do not have access to use the mob capture tool here.</red>"

@@ -212,6 +212,17 @@ public class MobCaptureTool extends Tool {
         if(!(entity instanceof Mob mob)) return;
         @NotNull Locale locale = localeManager.getConfiguration();
 
+        @Nullable MobCaptureToolConfig mobCaptureToolConfig = mobCaptureToolConfigurationManager.getConfiguration();
+        if(mobCaptureToolConfig == null) {
+            player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.mobCaptureTool().configError()));
+            return;
+        }
+
+        if(mobCaptureToolConfig.restrictedWorlds().contains(entity.getWorld().getName())) {
+            player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.mobCaptureTool().worldNotAllowed()));
+            return;
+        }
+
         // Only allow capture if the player can interact with entities
         if(!protectionManager.canInteractWithEntities(player, entity.getLocation())) {
             player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.mobCaptureTool().noAccess()));

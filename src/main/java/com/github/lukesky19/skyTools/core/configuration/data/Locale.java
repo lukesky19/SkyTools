@@ -78,6 +78,7 @@ public record Locale(
      * @param playerToolGiven The message sent to the player who receives a mob capture tool.
      * @param toolUsedUp The message sent to the player when their mob capture tool runs out of uses.
      * @param configError The message sent to the player when a mob capture tool cannot be created or updated due to a config error.
+     * @param worldNotAllowed The message sent to the player when the world isn't allowed.
      * @param noAccess The message sent when the player doesn't have access to use the mob capture tool.
      */
     @ConfigSerializable
@@ -86,5 +87,6 @@ public record Locale(
             String playerToolGiven,
             String toolUsedUp,
             String configError,
+            String worldNotAllowed,
             String noAccess) {}
 }
