@@ -41,7 +41,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.BlockDataMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -86,7 +85,7 @@ public class BuildToolListener implements Listener {
 
         @Nullable ItemStack itemStack = playerInteractEvent.getItem();
         if(itemStack == null) return;
-        if(!(itemStack.getItemMeta() instanceof BlockDataMeta)) return;
+//        if(!(itemStack.getItemMeta() instanceof BlockDataMeta)) return;
 
         @Nullable BuildToolConfig buildToolConfig = buildToolConfigurationManager.getConfiguration();
         if(buildToolConfig == null) return;
@@ -114,6 +113,8 @@ public class BuildToolListener implements Listener {
                     case POSITIONS_DIFFERENT_WORLDS -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().positionsDifferentWorlds()));
 
                     case MATERIAL_NOT_SET -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().materialNotSet()));
+
+                    case MATERIAL_NOT_BLOCK -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().materialNotBlock()));
 
                     case PLAYER_LACKS_MATERIALS -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().playerLacksMaterials()));
 
@@ -154,6 +155,8 @@ public class BuildToolListener implements Listener {
                     case POSITIONS_DIFFERENT_WORLDS -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().positionsDifferentWorlds()));
 
                     case MATERIAL_NOT_SET -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().materialNotSet()));
+
+                    case MATERIAL_NOT_BLOCK ->  player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().materialNotBlock()));
 
                     case PLAYER_LACKS_MATERIALS -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().playerLacksMaterials()));
 

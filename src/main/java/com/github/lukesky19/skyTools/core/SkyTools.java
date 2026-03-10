@@ -33,8 +33,10 @@ import com.github.lukesky19.skyTools.mobTool.configuration.MobCaptureToolConfigu
 import com.github.lukesky19.skyTools.mobTool.listener.MobCaptureListener;
 import com.github.lukesky19.skyTools.mobTool.listener.MobSpawnListener;
 import com.github.lukesky19.skyTools.mobTool.tool.MobCaptureToolManager;
+import com.github.lukesky19.skylib.api.adventure.AdventureUtil;
 import com.github.lukesky19.skylib.api.common.abstracts.SkyPlugin;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import java.util.List;
@@ -59,6 +61,8 @@ public final class SkyTools extends SkyPlugin {
      */
     @Override
     public void onEnable() {
+        if(!checkSkyLibVersion()) return;
+
         // Settings
         settingsManager = new SettingsManager(this);
         localeManager = new LocaleManager(this, settingsManager);
@@ -118,6 +122,30 @@ public final class SkyTools extends SkyPlugin {
      */
     @Override
     public void onDisable() {
-        taskManager.stopTasks();
+        if(taskManager != null) {
+            taskManager.stopTasks();
+        }
+    }
+
+    /**
+     * Checks if the Server has the proper SkyLib version.
+     * @return true if it does, false if not.
+     */
+    private boolean checkSkyLibVersion() {
+        PluginManager pluginManager = this.getServer().getPluginManager();
+        Plugin skyLib = pluginManager.getPlugin("SkyLib");
+        if(skyLib != null && skyLib.isEnabled()) {
+            String version = skyLib.getPluginMeta().getVersion();
+            String[] splitVersion = version.split("\\.");
+            int second = Integer.parseInt(splitVersion[1]);
+
+            if(second >= 4) {
+                return true;
+            }
+        }
+
+        this.getComponentLogger().error(AdventureUtil.deserialize("SkyLib Version 1.4.0.0 or newer is required to run this plugin."));
+        this.getServer().getPluginManager().disablePlugin(this);
+        return false;
     }
 }

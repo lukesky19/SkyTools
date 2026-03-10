@@ -155,7 +155,7 @@ public class MobCaptureTool extends Tool {
 
         List<TagResolver.Single> placeholderList = List.of(Placeholder.parsed("uses", String.valueOf(uses)));
         @NotNull Optional<@NotNull ItemStack> optionalItemStack = new ItemStackBuilder(logger)
-                .fromItemStackConfig(mobCaptureToolConfig.item(), null, null, placeholderList)
+                .fromItemStackConfig(mobCaptureToolConfig.item(), null, placeholderList)
                 .buildItemStack();
         if(optionalItemStack.isEmpty()) {
             logger.error(AdventureUtil.deserialize("<red>Unable to create the mob capture tool because the configuration is invalid.</red>"));

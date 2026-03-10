@@ -26,6 +26,7 @@ import com.github.lukesky19.skyTools.core.api.Tool;
 import com.github.lukesky19.skyTools.core.integration.HookManager;
 import com.github.lukesky19.skyTools.core.integration.impl.WorldGuardHook;
 import com.github.lukesky19.skylib.api.adventure.AdventureUtil;
+import com.github.lukesky19.skylib.api.format.FormatUtil;
 import com.github.lukesky19.skylib.api.itemstack.ItemStackBuilder;
 import com.github.lukesky19.skylib.libs.morepersistentdatatypes.DataType;
 import net.kyori.adventure.text.Component;
@@ -116,7 +117,7 @@ public class BuildTool extends Tool {
         }
 
         List<TagResolver.Single> placeholderList = List.of(
-                Placeholder.parsed("material", material != null ? material.name() : "None"),
+                Placeholder.parsed("material", material != null ? FormatUtil.formatMaterialName(material) : "None"),
                 Placeholder.parsed("world1", position1 != null ? position1.getWorld().getName() : "None"),
                 Placeholder.parsed("x1", position1 != null ? String.valueOf(position1.getBlockX()) : "None"),
                 Placeholder.parsed("y1", position1 != null ? String.valueOf(position1.getBlockY()) : "None"),
@@ -127,7 +128,7 @@ public class BuildTool extends Tool {
                 Placeholder.parsed("z2", position2 != null ? String.valueOf(position2.getBlockZ()) : "None"));
 
         @NotNull Optional<@NotNull ItemStack> optionalItemStack = new ItemStackBuilder(logger)
-                .fromItemStackConfig(buildToolConfig.item(), null, null, placeholderList)
+                .fromItemStackConfig(buildToolConfig.item(), null, placeholderList)
                 .buildItemStack();
         if(optionalItemStack.isEmpty()) {
             logger.error(AdventureUtil.deserialize("<red>Unable to create the build tool because the configuration is invalid.</red>"));
@@ -170,13 +171,21 @@ public class BuildTool extends Tool {
         if(!pdc.has(BuildToolKeys.BUILD_TOOL.getKey())) return; // ItemStack is not a Build Tool
 
         if(material != null) pdc.set(BuildToolKeys.MATERIAL.getKey(), PersistentDataType.STRING, material.toString());
-        if(position1 != null) pdc.set(BuildToolKeys.POSITION1.getKey(), DataType.LOCATION, position1);
-        if(position2 != null) pdc.set(BuildToolKeys.POSITION2.getKey(), DataType.LOCATION, position2);
+        if(position1 != null) {
+            pdc.set(BuildToolKeys.POSITION1.getKey(), DataType.LOCATION, position1);
+        } else {
+            pdc.remove(BuildToolKeys.POSITION1.getKey());
+        }
+        if(position2 != null) {
+            pdc.set(BuildToolKeys.POSITION2.getKey(), DataType.LOCATION, position2);
+        } else {
+            pdc.remove(BuildToolKeys.POSITION2.getKey());
+        }
 
         @Nullable BuildToolConfig buildToolConfig = buildToolConfigurationManager.getConfiguration();
         if(buildToolConfig != null) {
             List<TagResolver.Single> placeholderList = List.of(
-                    Placeholder.parsed("material", material != null ? material.name() : "None"),
+                    Placeholder.parsed("material", material != null ? FormatUtil.formatMaterialName(material) : "None"),
                     Placeholder.parsed("world1", position1 != null ? position1.getWorld().getName() : "None"),
                     Placeholder.parsed("x1", position1 != null ? String.valueOf(position1.getBlockX()) : "None"),
                     Placeholder.parsed("y1", position1 != null ? String.valueOf(position1.getBlockY()) : "None"),
@@ -210,9 +219,22 @@ public class BuildTool extends Tool {
         @Nullable String materialName = pdc.get(BuildToolKeys.MATERIAL.getKey(), PersistentDataType.STRING);
         if(materialName != null) {
             material = Material.getMaterial(materialName);
+
+            if(material != null && !material.isBlock()) {
+                material = null;
+            }
         }
-        position1 = pdc.get(BuildToolKeys.POSITION1.getKey(), DataType.LOCATION);
-        position2 = pdc.get(BuildToolKeys.POSITION2.getKey(), DataType.LOCATION);
+
+        if(pdc.has(BuildToolKeys.POSITION1.getKey())) {
+            position1 = pdc.get(BuildToolKeys.POSITION1.getKey(), DataType.LOCATION);
+        }
+
+        if(pdc.has(BuildToolKeys.POSITION2.getKey())) {
+            position2 = pdc.get(BuildToolKeys.POSITION2.getKey(), DataType.LOCATION);
+        }
+
+        // Save any changes
+        saveTool();
     }
 
     /**
@@ -298,6 +320,7 @@ public class BuildTool extends Tool {
         if(position2 == null) return BuildToolResult.POSITION_2_NOT_SET;
         if(!position1.getWorld().getName().equals(position2.getWorld().getName())) return BuildToolResult.POSITIONS_DIFFERENT_WORLDS;
         if(material == null) return BuildToolResult.MATERIAL_NOT_SET;
+        if(!material.isBlock()) return BuildToolResult.MATERIAL_NOT_BLOCK;
         if(!player.getInventory().contains(material)) return BuildToolResult.PLAYER_LACKS_MATERIALS;
         @Nullable BuildToolConfig buildToolConfig = buildToolConfigurationManager.getConfiguration();
         if(buildToolConfig == null) return BuildToolResult.BUILD_TOOL_CONFIG_INVALID;
@@ -307,6 +330,13 @@ public class BuildTool extends Tool {
         if(locationList.isEmpty()) return BuildToolResult.NO_LOCATIONS_FOUND;
 
         blockPlacementQueueManager.queuePlacementData(new PlacementData(player, material, locationList));
+
+        // Clear positions
+        position1 = null;
+        position2 = null;
+
+        // Save Tool
+        saveTool();
 
         return BuildToolResult.BUILD_QUEUED;
     }
@@ -331,6 +361,10 @@ public class BuildTool extends Tool {
          * The material isn't set.
          */
         MATERIAL_NOT_SET,
+        /**
+         * The material chosen is not a block.
+         */
+        MATERIAL_NOT_BLOCK,
         /**
          * The player's inventory doesn't contain any items of the selected material
          */

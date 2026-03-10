@@ -22,14 +22,14 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * This record contains the plugin's settings.
- * @param configVersion The config version.
+ * @param version The config version.
  * @param locale The locale.
  * @param placementFrequencyTicks How often the placement task runs.
  * @param placementsPerRun How many blocks can be placed per run.
  */
 @ConfigSerializable
 public record Settings(
-        @Nullable String configVersion,
+        int version,
         @Nullable String locale,
         long placementFrequencyTicks,
         int placementsPerRun) {}

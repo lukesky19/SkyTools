@@ -1,4 +1,4 @@
-config-version: 1.0.0.0
+version: 1
 locale: en_US
 # This is how frequently the block placement queue is processed.
 # 1 tick = 0.05 seconds

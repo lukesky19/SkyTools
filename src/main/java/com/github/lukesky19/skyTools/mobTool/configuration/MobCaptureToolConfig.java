@@ -25,12 +25,14 @@ import java.util.List;
 
 /**
  * This record holds the mob capture tool configuration.
+ * @param version The config version.
  * @param restrictedWorlds The world names the mob capture tool is not allowed in.
  * @param restrictedRegions The region names the mob capture tool is not allowed in.
  * @param item The {@link ItemStackConfig} for the mob capture tool.
  */
 @ConfigSerializable
 public record MobCaptureToolConfig(
+        int version,
         @NotNull List<String> restrictedWorlds,
         @NotNull List<String> restrictedRegions,
         @NotNull ItemStackConfig item) {}

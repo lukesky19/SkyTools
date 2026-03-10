@@ -24,7 +24,7 @@ import java.util.List;
 
 /**
  * This record contains the plugin's locale configuration.
- * @param configVersion The config version.
+ * @param version The config version.
  * @param prefix The plugin's prefix.
  * @param help The plugin's help message.
  * @param reload The plugin's reload message.
@@ -33,7 +33,7 @@ import java.util.List;
  */
 @ConfigSerializable
 public record Locale(
-        String configVersion,
+        int version,
         String prefix,
         List<String> help,
         String reload,
@@ -48,6 +48,7 @@ public record Locale(
      * @param positionTwoInvalid The message sent to the player when position 2 is invalid.
      * @param positionsDifferentWorlds The message sent to the player when the two positions are in different worlds.
      * @param materialNotSet The message sent to the player when the material isn't set.
+     * @param materialNotBlock The message sent to the player when the material is not a block.
      * @param playerLacksMaterials The message sent to the player when their inventory doesn't have any items of the selected material.
      * @param worldNotAllowed The message sent to the player when the world isn't allowed.
      * @param noLocationsFound The message sent when no valid locations were found to place blocks at.
@@ -65,6 +66,7 @@ public record Locale(
             String positionTwoInvalid,
             String positionsDifferentWorlds,
             String materialNotSet,
+            String materialNotBlock,
             String playerLacksMaterials,
             String worldNotAllowed,
             String noLocationsFound,

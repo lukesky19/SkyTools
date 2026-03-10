@@ -102,8 +102,7 @@ public class LocaleManager extends SimpleConfigManager<Locale> {
     public boolean validateConfiguration(@Nullable Locale configuration) {
         if(configuration == null) return false;
 
-        if(configuration.configVersion()  == null
-                || configuration.prefix()  == null
+        if(configuration.prefix()  == null
                 || configuration.reload()  == null
                 || configuration.buildTool().toolGiven() == null
                 || configuration.buildTool().playerToolGiven() == null
@@ -142,7 +141,7 @@ public class LocaleManager extends SimpleConfigManager<Locale> {
      */
     private void createDefaultLocale() {
         DEFAULT_LOCALE = new Locale(
-                "1.0.0.0",
+                1,
                 "<#2FC211><bold>SkyTools</bold></#2FC211><gray> ▪ </gray>",
                 List.of(
                         "<#2FC211>SkyTools is developed by <white><bold>lukeskywlker19</bold></white>.</#2FC211>",
@@ -161,6 +160,7 @@ public class LocaleManager extends SimpleConfigManager<Locale> {
                         "<red>Position 2 is not set.</red>",
                         "<red>The two positions must be set in the same world.</red>",
                         "<red>No material selected.</red>",
+                        "<red>The material selected is not a block.</red>",
                         "<red>Your inventory doesn't contain any items of the selected material.</red>",
                         "<red>The build tool is not allowed in this world.</red>",
                         "<red>No valid locations found to place blocks at.</red>",
