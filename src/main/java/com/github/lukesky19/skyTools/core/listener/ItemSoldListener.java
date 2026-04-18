@@ -24,14 +24,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * This class listens to when an item is sold through SkyShop and prevents the selling of tools.
  */
 public class ItemSoldListener implements Listener {
-    private final @NotNull BuildToolManager buildToolManager;
-    private final @NotNull MobCaptureToolManager mobCaptureToolManager;
+    private final @NonNull BuildToolManager buildToolManager;
+    private final @NonNull MobCaptureToolManager mobCaptureToolManager;
 
     /**
      * Constructor.
@@ -39,8 +39,8 @@ public class ItemSoldListener implements Listener {
      * @param mobCaptureToolManager A {@link MobCaptureToolManager} instance.
      */
     public ItemSoldListener(
-            @NotNull BuildToolManager buildToolManager,
-            @NotNull MobCaptureToolManager mobCaptureToolManager) {
+            @NonNull BuildToolManager buildToolManager,
+            @NonNull MobCaptureToolManager mobCaptureToolManager) {
         this.buildToolManager = buildToolManager;
         this.mobCaptureToolManager = mobCaptureToolManager;
     }

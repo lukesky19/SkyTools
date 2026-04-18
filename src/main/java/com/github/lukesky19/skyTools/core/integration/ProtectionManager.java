@@ -21,19 +21,19 @@ import com.github.lukesky19.skyTools.core.integration.impl.BentoBoxHook;
 import com.github.lukesky19.skyTools.core.integration.impl.WorldGuardHook;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * This class is used to check if a player can access an area.
  */
 public class ProtectionManager {
-    private final @NotNull HookManager hookManager;
+    private final @NonNull HookManager hookManager;
 
     /**
      * Constructor
      * @param hookManager A {@link HookManager} instance.
      */
-    public ProtectionManager(@NotNull HookManager hookManager) {
+    public ProtectionManager(@NonNull HookManager hookManager) {
         this.hookManager = hookManager;
     }
 
@@ -43,7 +43,7 @@ public class ProtectionManager {
      * @param location The {@link Location}.
      * @return true if they can, or false if not.
      */
-    public boolean canPlaceBlocks(@NotNull Player player, @NotNull Location location) {
+    public boolean canPlaceBlocks(@NonNull Player player, @NonNull Location location) {
         BentoBoxHook bentoBoxHook = hookManager.getHook(BentoBoxHook.class);
         WorldGuardHook worldGuardHook = hookManager.getHook(WorldGuardHook.class);
 
@@ -64,7 +64,7 @@ public class ProtectionManager {
      * @param location The {@link Location}.
      * @return true if they can, or false if not.
      */
-    public boolean canInteractWithEntities(@NotNull Player player, @NotNull Location location) {
+    public boolean canInteractWithEntities(@NonNull Player player, @NonNull Location location) {
         BentoBoxHook bentoBoxHook = hookManager.getHook(BentoBoxHook.class);
         WorldGuardHook worldGuardHook = hookManager.getHook(WorldGuardHook.class);
 

@@ -18,8 +18,8 @@
 package com.github.lukesky19.skyTools.buildTool.queue;
 
 import com.github.lukesky19.skyTools.buildTool.util.PlacementData;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -28,7 +28,7 @@ import java.util.Queue;
  * This class manages the queue for {@link PlacementData}.
  */
 public class BlockPlacementQueue {
-    private final @NotNull Queue<PlacementData> queue = new LinkedList<>();
+    private final @NonNull Queue<PlacementData> queue = new LinkedList<>();
     private boolean state = true;
 
     /**
@@ -40,7 +40,7 @@ public class BlockPlacementQueue {
      * Queue {@link PlacementData}.
      * @param placementData The {@link PlacementData}.
      */
-    public void queuePlacementData(@NotNull PlacementData placementData) {
+    public void queuePlacementData(@NonNull PlacementData placementData) {
         if(!state) return;
 
         queue.add(placementData);

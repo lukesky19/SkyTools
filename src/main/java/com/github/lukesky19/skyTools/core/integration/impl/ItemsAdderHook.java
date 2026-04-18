@@ -18,34 +18,34 @@
 package com.github.lukesky19.skyTools.core.integration.impl;
 
 import com.github.lukesky19.skyTools.core.integration.Hook;
-import com.github.lukesky19.skylib.api.common.abstracts.SkyPlugin;
+import com.github.lukesky19.skylib.paper.api.plugin.SkyPlugin;
 import dev.lone.itemsadder.api.CustomEntity;
 import dev.lone.itemsadder.api.CustomStack;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * This class manages interfacing with ItemsAdder.
  */
 public class ItemsAdderHook implements Hook {
-    private final @NotNull SkyPlugin plugin;
+    private final @NonNull SkyPlugin plugin;
     private boolean hooked = false;
 
     /**
      * Constructor
      * @param plugin A {@link SkyPlugin} instance.
      */
-    public ItemsAdderHook(@NotNull SkyPlugin plugin) {
+    public ItemsAdderHook(@NonNull SkyPlugin plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public void initialize() {
-        @Nullable Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("ItemsAdder");
+        Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("ItemsAdder");
         hooked = plugin != null && plugin.isEnabled();
     }
 
@@ -59,10 +59,10 @@ public class ItemsAdderHook implements Hook {
      * @param entity The {@link Entity}.
      * @return The namespaced id as a string (namespace:id) or null.
      */
-    public @Nullable String getCustomEntityNamespaceId(@NotNull Entity entity) {
+    public @Nullable String getCustomEntityNamespaceId(@NonNull Entity entity) {
         if(!hooked) return null;
 
-        @Nullable CustomEntity customEntity = CustomEntity.byAlreadySpawned(entity);
+        CustomEntity customEntity = CustomEntity.byAlreadySpawned(entity);
         if(customEntity == null) return null;
 
         return customEntity.getNamespacedID();
@@ -75,8 +75,8 @@ public class ItemsAdderHook implements Hook {
      * @return The {@link CustomEntity} or null.
      */
     public @Nullable CustomEntity spawnCustomEntity(
-            @NotNull Location location,
-            @NotNull String namespacedId) {
+            @NonNull Location location,
+            @NonNull String namespacedId) {
         if(!hooked) return null;
 
         return CustomEntity.spawn(namespacedId, location);
@@ -87,10 +87,10 @@ public class ItemsAdderHook implements Hook {
      * @param namespacedId The namespaced id as a {@link String}.
      * @return An {@link ItemStack} or null.
      */
-    public @Nullable ItemStack getCustomItem(@NotNull String namespacedId) {
+    public @Nullable ItemStack getCustomItem(@NonNull String namespacedId) {
         if(!hooked) return null;
 
-        @Nullable CustomStack customStack = CustomStack.getInstance(namespacedId);
+        CustomStack customStack = CustomStack.getInstance(namespacedId);
         if(customStack == null) return null;
 
         return customStack.getItemStack();

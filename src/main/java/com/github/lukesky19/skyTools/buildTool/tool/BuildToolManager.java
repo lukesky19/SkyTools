@@ -25,17 +25,17 @@ import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * This class manages the creation and validation of {@link BuildTool}s.
  */
 public class BuildToolManager {
-    private final @NotNull ComponentLogger logger;
-    private final @NotNull BuildToolConfigurationManager buildToolConfigurationManager;
-    private final @NotNull BlockPlacementQueue blockPlacementQueue;
-    private final @NotNull HookManager hookManager;
+    private final @NonNull ComponentLogger logger;
+    private final @NonNull BuildToolConfigurationManager buildToolConfigurationManager;
+    private final @NonNull BlockPlacementQueue blockPlacementQueue;
+    private final @NonNull HookManager hookManager;
 
     /**
      * Constructor
@@ -45,9 +45,9 @@ public class BuildToolManager {
      * @param hookManager A {@link HookManager} instance.
      */
     public BuildToolManager(
-            @NotNull ComponentLogger logger,
-            @NotNull BuildToolConfigurationManager buildToolConfigurationManager,
-            @NotNull BlockPlacementQueue blockPlacementQueue, @NotNull HookManager hookManager) {
+            @NonNull ComponentLogger logger,
+            @NonNull BuildToolConfigurationManager buildToolConfigurationManager,
+            @NonNull BlockPlacementQueue blockPlacementQueue, @NonNull HookManager hookManager) {
         this.logger = logger;
         this.buildToolConfigurationManager = buildToolConfigurationManager;
         this.blockPlacementQueue = blockPlacementQueue;
@@ -69,7 +69,7 @@ public class BuildToolManager {
      * @param itemStack The {@link ItemStack}.
      * @return The {@link BuildTool} or null if not a build tool.
      */
-    public @Nullable BuildTool getBuildTool(@NotNull ItemStack itemStack) {
+    public @Nullable BuildTool getBuildTool(@NonNull ItemStack itemStack) {
         if(!isBuildTool(itemStack)) return null;
 
         return new BuildTool(logger, buildToolConfigurationManager, blockPlacementQueue, hookManager, itemStack);
@@ -80,8 +80,8 @@ public class BuildToolManager {
      * @param itemStack The {@link ItemStack}.
      * @return true if a build tool, or false if not.
      */
-    public boolean isBuildTool(@NotNull ItemStack itemStack) {
-        @Nullable ItemMeta itemMeta = itemStack.getItemMeta();
+    public boolean isBuildTool(@NonNull ItemStack itemStack) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
         if(itemMeta == null) return false;
         PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
 

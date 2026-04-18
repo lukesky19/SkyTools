@@ -18,7 +18,7 @@
 package com.github.lukesky19.skyTools.core.integration.impl;
 
 import com.github.lukesky19.skyTools.core.integration.Hook;
-import com.github.lukesky19.skylib.api.common.abstracts.SkyPlugin;
+import com.github.lukesky19.skylib.paper.api.plugin.SkyPlugin;
 import dev.rosewood.rosestacker.api.RoseStackerAPI;
 import dev.rosewood.rosestacker.nms.NMSAdapter;
 import dev.rosewood.rosestacker.nms.NMSHandler;
@@ -31,21 +31,21 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * This class manages interfacing with RoseStacker.
  */
 public class RoseStackerHook implements Hook {
-    private final @NotNull SkyPlugin plugin;
+    private final @NonNull SkyPlugin plugin;
     private @Nullable RoseStackerAPI roseStackerAPI;
 
     /**
      * Constructor
      * @param plugin A {@link JavaPlugin} instance.
      */
-    public RoseStackerHook(@NotNull SkyPlugin plugin) {
+    public RoseStackerHook(@NonNull SkyPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -54,7 +54,7 @@ public class RoseStackerHook implements Hook {
      */
     @Override
     public void initialize() {
-        @Nullable Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("RoseStacker");
+        Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("RoseStacker");
         if(plugin != null && plugin.isEnabled()) {
             roseStackerAPI = RoseStackerAPI.getInstance();
         }
@@ -74,7 +74,7 @@ public class RoseStackerHook implements Hook {
      * @param itemStack The {@link ItemStack}.
      * @return true if stacked or false if not or RoseStacker is not hooked into.
      */
-    public boolean isStacked(@NotNull ItemStack itemStack) {
+    public boolean isStacked(@NonNull ItemStack itemStack) {
         if(roseStackerAPI == null) return false;
 
         NMSHandler nmsHandler = NMSAdapter.getHandler();
@@ -91,7 +91,7 @@ public class RoseStackerHook implements Hook {
      * @param amount The amount.
      * @return An {@link ItemStack}.
      */
-    public @NotNull ItemStack getUpdatedItemStack(@NotNull ItemStack itemStack, @Nullable EntityType entityType, int amount) {
+    public @NonNull ItemStack getUpdatedItemStack(@NonNull ItemStack itemStack, @Nullable EntityType entityType, int amount) {
         if(roseStackerAPI == null) {
             itemStack.setAmount(amount);
             return itemStack;
@@ -109,7 +109,7 @@ public class RoseStackerHook implements Hook {
      * @param itemStack The {@link ItemStack} to get the stack size for.
      * @return The stack size or 0 if not a stacked ItemStack or RoseStacker isn't hooked into. Use {@link ItemStack#getAmount()} in such a scenario.
      */
-    public int getStackSize(@NotNull ItemStack itemStack) {
+    public int getStackSize(@NonNull ItemStack itemStack) {
         if(roseStackerAPI == null) return 0;
 
         NMSHandler nmsHandler = NMSAdapter.getHandler();
@@ -123,7 +123,7 @@ public class RoseStackerHook implements Hook {
      * @param itemStack The {@link ItemStack}.
      * @return The {@link SpawnerType} or null.
      */
-    public @Nullable SpawnerType getSpawnerType(@NotNull ItemStack itemStack) {
+    public @Nullable SpawnerType getSpawnerType(@NonNull ItemStack itemStack) {
         if(roseStackerAPI == null) return null;
 
         return ItemUtils.getStackedItemSpawnerType(itemStack);
@@ -135,7 +135,7 @@ public class RoseStackerHook implements Hook {
      * @param entity The {@link Entity} to get the stack size for.
      * @return The entity's stack size or 1.
      */
-    public int getStackSize(@NotNull Entity entity) {
+    public int getStackSize(@NonNull Entity entity) {
         if(roseStackerAPI == null) return 1;
         if(!(entity instanceof LivingEntity livingEntity)) return 1;
 
@@ -152,10 +152,10 @@ public class RoseStackerHook implements Hook {
      * @param entity The {@link LivingEntity}.
      * @return A {@link StackedEntity} or null.
      */
-    public @Nullable StackedEntity getStackedEntity(@NotNull LivingEntity entity) {
+    public @Nullable StackedEntity getStackedEntity(@NonNull LivingEntity entity) {
         if(roseStackerAPI == null) return null;
 
-        @Nullable StackedEntity existingStackedEntity = roseStackerAPI.getStackedEntity(entity);
+        StackedEntity existingStackedEntity = roseStackerAPI.getStackedEntity(entity);
         if(existingStackedEntity != null) return existingStackedEntity;
 
         return roseStackerAPI.createEntityStack(entity, false);

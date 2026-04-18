@@ -35,15 +35,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SpawnEggMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Listens for when a player attempts to use a custom spawn egg from the mob capture tool.
  */
 public class MobSpawnListener implements Listener {
-    private final @NotNull MobCaptureToolManager mobCaptureToolManager;
-    private final @NotNull HookManager hookManager;
+    private final @NonNull MobCaptureToolManager mobCaptureToolManager;
+    private final @NonNull HookManager hookManager;
 
     /**
      * Constructor
@@ -51,8 +50,8 @@ public class MobSpawnListener implements Listener {
      * @param hookManager A {@link HookManager} instance.
      */
     public MobSpawnListener(
-            @NotNull MobCaptureToolManager mobCaptureToolManager,
-            @NotNull HookManager hookManager) {
+            @NonNull MobCaptureToolManager mobCaptureToolManager,
+            @NonNull HookManager hookManager) {
         this.mobCaptureToolManager = mobCaptureToolManager;
         this.hookManager = hookManager;
     }
@@ -62,30 +61,30 @@ public class MobSpawnListener implements Listener {
      * @param playerInteractEvent A {@link PlayerInteractEvent}.
      */
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onSpawnEggClick(@NotNull PlayerInteractEvent playerInteractEvent) {
+    public void onSpawnEggClick(@NonNull PlayerInteractEvent playerInteractEvent) {
         Player player = playerInteractEvent.getPlayer();
         ItemsAdderHook itemsAdderHook = hookManager.getHook(ItemsAdderHook.class);
         RoseStackerHook roseStackerHook = hookManager.getHook(RoseStackerHook.class);
 
-        @Nullable Location location = playerInteractEvent.getInteractionPoint();
+        Location location = playerInteractEvent.getInteractionPoint();
         if(location == null) return;
-        @Nullable ItemStack itemStack = playerInteractEvent.getItem();
+        ItemStack itemStack = playerInteractEvent.getItem();
         if(itemStack == null) return;
         if(!mobCaptureToolManager.isCustomSpawnEgg(itemStack)) return;
 
         ItemMeta itemMeta = itemStack.getItemMeta();
         PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
-        @Nullable String namespacedId = persistentDataContainer.get(SpawnEggKeys.ITEMSADDER_NAMESPACED_ID.getKey(), PersistentDataType.STRING);
+        String namespacedId = persistentDataContainer.get(SpawnEggKeys.ITEMSADDER_NAMESPACED_ID.getKey(), PersistentDataType.STRING);
         boolean aiStatus = persistentDataContainer.getOrDefault(SpawnEggKeys.AI_STATUS.getKey(), PersistentDataType.BOOLEAN, true);
         boolean awareStatus = persistentDataContainer.getOrDefault(SpawnEggKeys.AWARE_STATUS.getKey(), PersistentDataType.BOOLEAN, true);
         int stackSize = persistentDataContainer.getOrDefault(SpawnEggKeys.ROSESTACKER_STACK_SIZE.getKey(), PersistentDataType.INTEGER, 1);
-        @Nullable EntitySnapshot entitySnapshot = itemMeta instanceof SpawnEggMeta spawnEggMeta ? spawnEggMeta.getSpawnedEntity() : null;
+        EntitySnapshot entitySnapshot = itemMeta instanceof SpawnEggMeta spawnEggMeta ? spawnEggMeta.getSpawnedEntity() : null;
 
         if(itemsAdderHook.isHooked() && namespacedId != null) {
             playerInteractEvent.setCancelled(true);
 
             // Spawn the entity
-            @Nullable CustomEntity customEntity = itemsAdderHook.spawnCustomEntity(location, namespacedId);
+            CustomEntity customEntity = itemsAdderHook.spawnCustomEntity(location, namespacedId);
             // Check if spawned successfully
             if(customEntity != null) {
                 // Get the entity
@@ -123,7 +122,7 @@ public class MobSpawnListener implements Listener {
      * @param hasAI If the entity should have AI.
      * @param isAware If the entity should be aware.
      */
-    private void updateEntityAI(@NotNull Entity entity, boolean hasAI, boolean isAware) {
+    private void updateEntityAI(@NonNull Entity entity, boolean hasAI, boolean isAware) {
         if(entity instanceof LivingEntity livingEntity) {
             livingEntity.setAI(hasAI);
 
@@ -140,12 +139,12 @@ public class MobSpawnListener implements Listener {
      * @param stackSize The stack size.
      */
     private void updateEntityStackSize(
-            @NotNull RoseStackerHook roseStackerHook,
-            @NotNull Entity entity,
+            @NonNull RoseStackerHook roseStackerHook,
+            @NonNull Entity entity,
             int stackSize) {
         if(!roseStackerHook.isHooked()) return;
         if(!(entity instanceof LivingEntity livingEntity)) return;
-        @Nullable StackedEntity stackedEntity = roseStackerHook.getStackedEntity(livingEntity);
+        StackedEntity stackedEntity = roseStackerHook.getStackedEntity(livingEntity);
         if(stackedEntity == null) return;
 
         stackedEntity.increaseStackSize(stackSize - 1, true);
@@ -156,7 +155,7 @@ public class MobSpawnListener implements Listener {
      * @param player The {@link Player} to remove the item from.
      * @param originalStack The original {@link ItemStack}.
      */
-    private void removeItemStack(@NotNull Player player, @NotNull ItemStack originalStack) {
+    private void removeItemStack(@NonNull Player player, @NonNull ItemStack originalStack) {
         ItemStack removeStack = originalStack.clone();
         removeStack.setAmount(1);
 

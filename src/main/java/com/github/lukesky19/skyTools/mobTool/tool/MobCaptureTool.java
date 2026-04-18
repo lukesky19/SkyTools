@@ -28,10 +28,10 @@ import com.github.lukesky19.skyTools.mobTool.configuration.MobCaptureToolConfig;
 import com.github.lukesky19.skyTools.mobTool.configuration.MobCaptureToolConfigurationManager;
 import com.github.lukesky19.skyTools.mobTool.util.MobToolKeys;
 import com.github.lukesky19.skyTools.mobTool.util.SpawnEggKeys;
-import com.github.lukesky19.skylib.api.adventure.AdventureUtil;
-import com.github.lukesky19.skylib.api.itemstack.ItemStackBuilder;
-import com.github.lukesky19.skylib.api.player.PlayerUtil;
-import com.github.lukesky19.skylib.api.registry.RegistryUtil;
+import com.github.lukesky19.skylib.common.api.adventure.AdventureUtility;
+import com.github.lukesky19.skylib.paper.api.itemstack.ItemStackBuilder;
+import com.github.lukesky19.skylib.paper.api.player.PlayerUtil;
+import com.github.lukesky19.skylib.paper.api.registry.RegistryUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -44,8 +44,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SpawnEggMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -54,13 +54,13 @@ import java.util.Optional;
  * This class represents an {@link ItemStack} that is a mob capture tool.
  */
 public class MobCaptureTool extends Tool {
-    private final @NotNull ComponentLogger logger;
-    private final @NotNull LocaleManager localeManager;
-    private final @NotNull HookManager hookManager;
-    private final @NotNull ProtectionManager protectionManager;
-    private final @NotNull MobCaptureToolConfigurationManager mobCaptureToolConfigurationManager;
+    private final @NonNull ComponentLogger logger;
+    private final @NonNull LocaleManager localeManager;
+    private final @NonNull HookManager hookManager;
+    private final @NonNull ProtectionManager protectionManager;
+    private final @NonNull MobCaptureToolConfigurationManager mobCaptureToolConfigurationManager;
 
-    private final @NotNull Player player;
+    private final @NonNull Player player;
     private @Nullable ItemStack itemStack;
     private @Nullable EquipmentSlot equipmentSlot = null;
     private int uses = -1;
@@ -75,12 +75,12 @@ public class MobCaptureTool extends Tool {
      * @param player The {@link Player} using the tool.
      */
     public MobCaptureTool(
-            @NotNull ComponentLogger logger,
-            @NotNull LocaleManager localeManager,
-            @NotNull MobCaptureToolConfigurationManager mobCaptureToolConfigurationManager,
-            @NotNull HookManager hookManager,
-            @NotNull ProtectionManager protectionManager,
-            @NotNull Player player) {
+            @NonNull ComponentLogger logger,
+            @NonNull LocaleManager localeManager,
+            @NonNull MobCaptureToolConfigurationManager mobCaptureToolConfigurationManager,
+            @NonNull HookManager hookManager,
+            @NonNull ProtectionManager protectionManager,
+            @NonNull Player player) {
         this.logger = logger;
         this.localeManager = localeManager;
         this.mobCaptureToolConfigurationManager = mobCaptureToolConfigurationManager;
@@ -102,14 +102,14 @@ public class MobCaptureTool extends Tool {
      * @param equipmentSlot The {@link EquipmentSlot} the tool is in.
      */
     public MobCaptureTool(
-            @NotNull ComponentLogger logger,
-            @NotNull LocaleManager localeManager,
-            @NotNull MobCaptureToolConfigurationManager mobCaptureToolConfigurationManager,
-            @NotNull HookManager hookManager,
-            @NotNull ProtectionManager protectionManager,
-            @NotNull Player player,
-            @NotNull ItemStack itemStack,
-            @NotNull EquipmentSlot equipmentSlot) {
+            @NonNull ComponentLogger logger,
+            @NonNull LocaleManager localeManager,
+            @NonNull MobCaptureToolConfigurationManager mobCaptureToolConfigurationManager,
+            @NonNull HookManager hookManager,
+            @NonNull ProtectionManager protectionManager,
+            @NonNull Player player,
+            @NonNull ItemStack itemStack,
+            @NonNull EquipmentSlot equipmentSlot) {
         this.logger = logger;
         this.localeManager = localeManager;
         this.mobCaptureToolConfigurationManager = mobCaptureToolConfigurationManager;
@@ -147,18 +147,18 @@ public class MobCaptureTool extends Tool {
     public @Nullable ItemStack createTool(int uses) {
         uses = Math.max(-1, uses);
 
-        @Nullable MobCaptureToolConfig mobCaptureToolConfig = mobCaptureToolConfigurationManager.getConfiguration();
+        MobCaptureToolConfig mobCaptureToolConfig = mobCaptureToolConfigurationManager.getConfiguration();
         if(mobCaptureToolConfig == null) {
-            logger.error(AdventureUtil.deserialize("<red>Unable to create the mob capture tool because the configuration is invalid.</red>"));
+            logger.warn(AdventureUtility.plain("Unable to create the mob capture tool because the configuration is invalid."));
             return null;
         }
 
         List<TagResolver.Single> placeholderList = List.of(Placeholder.parsed("uses", String.valueOf(uses)));
-        @NotNull Optional<@NotNull ItemStack> optionalItemStack = new ItemStackBuilder(logger)
+        Optional<@NonNull ItemStack> optionalItemStack = new ItemStackBuilder(logger)
                 .fromItemStackConfig(mobCaptureToolConfig.item(), null, placeholderList)
                 .buildItemStack();
         if(optionalItemStack.isEmpty()) {
-            logger.error(AdventureUtil.deserialize("<red>Unable to create the mob capture tool because the configuration is invalid.</red>"));
+            logger.warn(AdventureUtility.plain("Unable to create the mob capture tool because the configuration is invalid."));
             return null;
         }
 
@@ -187,17 +187,17 @@ public class MobCaptureTool extends Tool {
         PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
         pdc.set(MobToolKeys.USES.getKey(), PersistentDataType.INTEGER, uses);
 
-        @Nullable MobCaptureToolConfig mobCaptureToolConfig = mobCaptureToolConfigurationManager.getConfiguration();
+        MobCaptureToolConfig mobCaptureToolConfig = mobCaptureToolConfigurationManager.getConfiguration();
         if(mobCaptureToolConfig != null) {
             List<TagResolver.Single> placeholderList = List.of(Placeholder.parsed("uses", String.valueOf(uses)));
 
             List<String> stringLore = mobCaptureToolConfig.item().lore();
-            List<Component> componentLore = stringLore.stream().map(loreLine -> AdventureUtil.deserialize(loreLine, placeholderList)).toList();
+            List<Component> componentLore = stringLore.stream().map(loreLine -> AdventureUtility.deserialize(loreLine, placeholderList)).toList();
 
             itemMeta.lore(componentLore);
         } else {
-            logger.error(AdventureUtil.deserialize("Unable to update mob capture tool lore because of invalid build tool configuration."));
-            logger.info(AdventureUtil.deserialize("Uses are still accurately tracked, but the item's lore may not accurately display the uses."));
+            logger.warn(AdventureUtility.plain("Unable to update mob capture tool lore because of invalid build tool configuration."));
+            logger.info(AdventureUtility.plain("Uses are still accurately tracked, but the item's lore may not accurately display the uses."));
         }
 
         itemStack.setItemMeta(itemMeta);
@@ -207,25 +207,25 @@ public class MobCaptureTool extends Tool {
      * Turn the provided entity into a spawn egg if possible.
      * @param entity The {@link Entity}.
      */
-    public void captureEntity(@NotNull Entity entity) {
+    public void captureEntity(@NonNull Entity entity) {
         // Only allow capture of mobs
         if(!(entity instanceof Mob mob)) return;
-        @NotNull Locale locale = localeManager.getConfiguration();
+        Locale locale = localeManager.getConfiguration();
 
-        @Nullable MobCaptureToolConfig mobCaptureToolConfig = mobCaptureToolConfigurationManager.getConfiguration();
+        MobCaptureToolConfig mobCaptureToolConfig = mobCaptureToolConfigurationManager.getConfiguration();
         if(mobCaptureToolConfig == null) {
-            player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.mobCaptureTool().configError()));
+            player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.mobCaptureTool().configError()));
             return;
         }
 
         if(mobCaptureToolConfig.restrictedWorlds().contains(entity.getWorld().getName())) {
-            player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.mobCaptureTool().worldNotAllowed()));
+            player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.mobCaptureTool().worldNotAllowed()));
             return;
         }
 
         // Only allow capture if the player can interact with entities
         if(!protectionManager.canInteractWithEntities(player, entity.getLocation())) {
-            player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.mobCaptureTool().noAccess()));
+            player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.mobCaptureTool().noAccess()));
             return;
         }
 
@@ -242,7 +242,7 @@ public class MobCaptureTool extends Tool {
 
         // Log an error if EquipmentSlot is null
         if(equipmentSlot == null) {
-            logger.warn(AdventureUtil.deserialize("Unable to save updated tool uses due to a null EquipmentSlot."));
+            logger.warn(AdventureUtility.plain("Unable to save updated tool uses due to a null EquipmentSlot."));
             return;
         }
 
@@ -253,7 +253,7 @@ public class MobCaptureTool extends Tool {
         if(uses == 0) {
             player.getInventory().setItem(equipmentSlot, ItemType.AIR.createItemStack());
 
-            player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.mobCaptureTool().toolUsedUp()));
+            player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.mobCaptureTool().toolUsedUp()));
         } else {
             saveTool();
         }
@@ -265,7 +265,7 @@ public class MobCaptureTool extends Tool {
      * @param entity The {@link LivingEntity}.
      * @return The {@link ItemStack} or null.
      */
-    private @Nullable ItemStack getSpawnEgg(@NotNull LivingEntity entity) {
+    private @Nullable ItemStack getSpawnEgg(@NonNull LivingEntity entity) {
         RoseStackerHook roseStackerHook = hookManager.getHook(RoseStackerHook.class);
         ItemsAdderHook itemsAdderHook = hookManager.getHook(ItemsAdderHook.class);
 
@@ -277,21 +277,21 @@ public class MobCaptureTool extends Tool {
         boolean aware = !(entity instanceof Mob mob) || mob.isAware();
 
         // Get the custom entity name or the default name
-        @Nullable Component entityNameComponent = entity.customName();
-        @NotNull String entityNameString = entityNameComponent != null ? AdventureUtil.serialize(entityNameComponent) : entity.getName();
+        Component entityNameComponent = entity.customName();
+        String entityNameString = entityNameComponent != null ? AdventureUtility.serialize(entityNameComponent) : entity.getName();
 
         // The amount of mobs in the stack
         // Will return 1 if RoseStacker isn't hooked so a isHooked check isn't required.
         int stackSize = roseStackerHook.getStackSize(entity);
 
         // ItemAdders - Get the namespaced id for the entity (if any)
-        @Nullable String namespacedId = null;
+        String namespacedId = null;
         if(itemsAdderHook.isHooked()) {
             namespacedId = itemsAdderHook.getCustomEntityNamespaceId(entity);
         }
 
         // Attempt to get the ItemStack for the spawn egg
-        @Nullable ItemStack itemStack;
+        ItemStack itemStack;
         if(namespacedId != null) {
             // Use ItemsAdderHook to attempt to get the custom spawn egg by the entity's namespaced id
             itemStack = itemsAdderHook.getCustomItem(namespacedId);
@@ -309,7 +309,7 @@ public class MobCaptureTool extends Tool {
         if(itemStack == null) return null;
 
         // Create a snapshot of the entity
-        @Nullable EntitySnapshot entitySnapshot = entity.createSnapshot();
+        EntitySnapshot entitySnapshot = entity.createSnapshot();
         if(entitySnapshot == null) return null;
 
         // Remove the entity
@@ -328,11 +328,11 @@ public class MobCaptureTool extends Tool {
 
         // Set the lore
         List<Component> lore = List.of(
-                AdventureUtil.deserialize("<gray>Entity Type: </gray>" + entityType.toString().toLowerCase()),
-                AdventureUtil.deserialize("<gray>Entity Name: </gray>" + entityNameString),
-                AdventureUtil.deserialize("<gray>Custom: </gray>" + (namespacedId != null)),
-                AdventureUtil.deserialize("<gray>Has AI: </gray>" + (ai && aware)),
-                AdventureUtil.deserialize("<gray>Amount: " + stackSize));
+                AdventureUtility.deserialize("<gray>Entity Type: </gray>" + entityType.toString().toLowerCase()),
+                AdventureUtility.deserialize("<gray>Entity Name: </gray>" + entityNameString),
+                AdventureUtility.deserialize("<gray>Custom: </gray>" + (namespacedId != null)),
+                AdventureUtility.deserialize("<gray>Has AI: </gray>" + (ai && aware)),
+                AdventureUtility.deserialize("<gray>Amount: " + stackSize));
         itemMeta.lore(lore);
 
         // Store custom data
@@ -359,8 +359,8 @@ public class MobCaptureTool extends Tool {
      * @param entityType The {@link EntityType}.
      * @return An {@link ItemStack} or null.
      */
-    private @Nullable ItemStack getSpawnEgg(@NotNull EntityType entityType) {
-        @Nullable ItemType itemType = getItemTypeFromEntityType(entityType);
+    private @Nullable ItemStack getSpawnEgg(@NonNull EntityType entityType) {
+        ItemType itemType = getItemTypeFromEntityType(entityType);
         if(itemType == null) return null;
 
         return itemType.createItemStack();
@@ -371,7 +371,7 @@ public class MobCaptureTool extends Tool {
      * @param entityType The {@link EntityType}.
      * @return The {@link ItemType} or null if no spawn egg exists for that {@link EntityType}.
      */
-    private @Nullable ItemType getItemTypeFromEntityType(@NotNull EntityType entityType) {
+    private @Nullable ItemType getItemTypeFromEntityType(@NonNull EntityType entityType) {
         return RegistryUtil.getItemType(logger, entityType.getKey().getKey() + "_spawn_egg").orElse(null);
     }
 }

@@ -18,7 +18,7 @@
 package com.github.lukesky19.skyTools.core.integration.impl;
 
 import com.github.lukesky19.skyTools.core.integration.Hook;
-import com.github.lukesky19.skylib.api.common.abstracts.SkyPlugin;
+import com.github.lukesky19.skylib.paper.api.plugin.SkyPlugin;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.LocalPlayer;
@@ -30,8 +30,8 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,14 +40,14 @@ import java.util.List;
  * This class manages interfacing with WorldGuard.
  */
 public class WorldGuardHook implements Hook {
-    private final @NotNull SkyPlugin skyPlugin;
+    private final @NonNull SkyPlugin skyPlugin;
     private @Nullable WorldGuard worldGuard;
 
     /**
      * Constructor
      * @param skyPlugin A {@link SkyPlugin} instance.
      */
-    public WorldGuardHook(@NotNull SkyPlugin skyPlugin) {
+    public WorldGuardHook(@NonNull SkyPlugin skyPlugin) {
         this.skyPlugin = skyPlugin;
     }
 
@@ -68,7 +68,7 @@ public class WorldGuardHook implements Hook {
      * @param location The {@link Location}.
      * @return A {@link List} of {@link String}s.
      */
-    public @NotNull List<String> getRegionNames(@NotNull Location location) {
+    public @NonNull List<String> getRegionNames(@NonNull Location location) {
         if(worldGuard == null) return new ArrayList<>();
 
         RegionQuery query = worldGuard.getPlatform().getRegionContainer().createQuery();
@@ -83,7 +83,7 @@ public class WorldGuardHook implements Hook {
      * @param location The {@link Location}.
      * @return true if they can, false if not.
      */
-    public boolean canPlayerPlaceBlocks(@NotNull Player player, @NotNull Location location) {
+    public boolean canPlayerPlaceBlocks(@NonNull Player player, @NonNull Location location) {
         if(worldGuard == null) return true;
 
         RegionQuery query = worldGuard.getPlatform().getRegionContainer().createQuery();
@@ -95,7 +95,7 @@ public class WorldGuardHook implements Hook {
             return true;
         }
 
-        @Nullable StateFlag.State state = query.queryState(wgLocation, wgPlayer, Flags.BLOCK_PLACE);
+        StateFlag.@Nullable State state = query.queryState(wgLocation, wgPlayer, Flags.BLOCK_PLACE);
 
         return state == null || state.equals(StateFlag.State.ALLOW);
     }
@@ -106,7 +106,7 @@ public class WorldGuardHook implements Hook {
      * @param location The {@link Location}.
      * @return true if the player can, or false if not.
      */
-    public boolean canPlayerInteractEntity(@NotNull Player player, @NotNull Location location) {
+    public boolean canPlayerInteractEntity(@NonNull Player player, @NonNull Location location) {
         if(worldGuard == null) return true;
 
         RegionQuery query = worldGuard.getPlatform().getRegionContainer().createQuery();
@@ -118,7 +118,7 @@ public class WorldGuardHook implements Hook {
             return true;
         }
 
-        @Nullable StateFlag.State state = query.queryState(wgLocation, wgPlayer, Flags.INTERACT);
+        StateFlag.@Nullable State state = query.queryState(wgLocation, wgPlayer, Flags.INTERACT);
 
         return state == null || state.equals(StateFlag.State.ALLOW);
     }

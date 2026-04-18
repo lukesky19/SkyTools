@@ -25,10 +25,10 @@ import com.github.lukesky19.skyTools.buildTool.util.PlacementData;
 import com.github.lukesky19.skyTools.core.api.Tool;
 import com.github.lukesky19.skyTools.core.integration.HookManager;
 import com.github.lukesky19.skyTools.core.integration.impl.WorldGuardHook;
-import com.github.lukesky19.skylib.api.adventure.AdventureUtil;
-import com.github.lukesky19.skylib.api.format.FormatUtil;
-import com.github.lukesky19.skylib.api.itemstack.ItemStackBuilder;
+import com.github.lukesky19.skylib.common.api.adventure.AdventureUtility;
 import com.github.lukesky19.skylib.libs.morepersistentdatatypes.DataType;
+import com.github.lukesky19.skylib.paper.api.format.FormatUtil;
+import com.github.lukesky19.skylib.paper.api.itemstack.ItemStackBuilder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -40,8 +40,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -52,10 +52,10 @@ import static com.github.lukesky19.skyTools.buildTool.util.PluginUtils.getLocati
  * This class represents an {@link ItemStack} that is a build tool.
  */
 public class BuildTool extends Tool {
-    private final @NotNull ComponentLogger logger;
-    private final @NotNull BuildToolConfigurationManager buildToolConfigurationManager;
-    private final @NotNull BlockPlacementQueue blockPlacementQueueManager;
-    private final @NotNull HookManager hookManager;
+    private final @NonNull ComponentLogger logger;
+    private final @NonNull BuildToolConfigurationManager buildToolConfigurationManager;
+    private final @NonNull BlockPlacementQueue blockPlacementQueueManager;
+    private final @NonNull HookManager hookManager;
 
     private @Nullable ItemStack itemStack;
 
@@ -71,9 +71,9 @@ public class BuildTool extends Tool {
      * @param hookManager A {@link HookManager} instance.
      */
     public BuildTool(
-            @NotNull ComponentLogger logger,
-            @NotNull BuildToolConfigurationManager buildToolConfigurationManager,
-            @NotNull BlockPlacementQueue blockPlacementQueueManager, @NotNull HookManager hookManager) {
+            @NonNull ComponentLogger logger,
+            @NonNull BuildToolConfigurationManager buildToolConfigurationManager,
+            @NonNull BlockPlacementQueue blockPlacementQueueManager, @NonNull HookManager hookManager) {
         this.logger = logger;
         this.buildToolConfigurationManager = buildToolConfigurationManager;
         this.blockPlacementQueueManager = blockPlacementQueueManager;
@@ -89,11 +89,11 @@ public class BuildTool extends Tool {
      * @param itemStack The {@link ItemStack} for this build tool.
      */
     public BuildTool(
-            @NotNull ComponentLogger logger,
-            @NotNull BuildToolConfigurationManager buildToolConfigurationManager,
-            @NotNull BlockPlacementQueue blockPlacementQueueManager,
-            @NotNull HookManager hookManager,
-            @NotNull ItemStack itemStack) {
+            @NonNull ComponentLogger logger,
+            @NonNull BuildToolConfigurationManager buildToolConfigurationManager,
+            @NonNull BlockPlacementQueue blockPlacementQueueManager,
+            @NonNull HookManager hookManager,
+            @NonNull ItemStack itemStack) {
         this.logger = logger;
         this.buildToolConfigurationManager = buildToolConfigurationManager;
         this.blockPlacementQueueManager = blockPlacementQueueManager;
@@ -110,9 +110,9 @@ public class BuildTool extends Tool {
      */
     @Override
     public @Nullable ItemStack createTool() {
-        @Nullable BuildToolConfig buildToolConfig = buildToolConfigurationManager.getConfiguration();
+        BuildToolConfig buildToolConfig = buildToolConfigurationManager.getConfiguration();
         if(buildToolConfig == null) {
-            logger.error(AdventureUtil.deserialize("<red>Unable to create the build tool because the configuration is invalid.</red>"));
+            logger.warn(AdventureUtility.plain("Unable to create the build tool because the configuration is invalid."));
             return null;
         }
 
@@ -127,11 +127,11 @@ public class BuildTool extends Tool {
                 Placeholder.parsed("y2", position2 != null ? String.valueOf(position2.getBlockY()) : "None"),
                 Placeholder.parsed("z2", position2 != null ? String.valueOf(position2.getBlockZ()) : "None"));
 
-        @NotNull Optional<@NotNull ItemStack> optionalItemStack = new ItemStackBuilder(logger)
+        Optional<@NonNull ItemStack> optionalItemStack = new ItemStackBuilder(logger)
                 .fromItemStackConfig(buildToolConfig.item(), null, placeholderList)
                 .buildItemStack();
         if(optionalItemStack.isEmpty()) {
-            logger.error(AdventureUtil.deserialize("<red>Unable to create the build tool because the configuration is invalid.</red>"));
+            logger.warn(AdventureUtility.plain("Unable to create the build tool because the configuration is invalid."));
             return null;
         }
 
@@ -182,7 +182,7 @@ public class BuildTool extends Tool {
             pdc.remove(BuildToolKeys.POSITION2.getKey());
         }
 
-        @Nullable BuildToolConfig buildToolConfig = buildToolConfigurationManager.getConfiguration();
+        BuildToolConfig buildToolConfig = buildToolConfigurationManager.getConfiguration();
         if(buildToolConfig != null) {
             List<TagResolver.Single> placeholderList = List.of(
                     Placeholder.parsed("material", material != null ? FormatUtil.formatMaterialName(material) : "None"),
@@ -196,11 +196,11 @@ public class BuildTool extends Tool {
                     Placeholder.parsed("z2", position2 != null ? String.valueOf(position2.getBlockZ()) : "None"));
 
             List<String> stringLore = buildToolConfig.item().lore();
-            List<Component> componentLore = stringLore.stream().map(loreLine -> AdventureUtil.deserialize(loreLine, placeholderList)).toList();
+            List<Component> componentLore = stringLore.stream().map(loreLine -> AdventureUtility.deserialize(loreLine, placeholderList)).toList();
 
             itemMeta.lore(componentLore);
         } else {
-            logger.error(AdventureUtil.deserialize("Unable to update build tool lore because of invalid build tool configuration."));
+            logger.warn(AdventureUtility.plain("Unable to update build tool lore because of invalid build tool configuration."));
         }
 
         itemStack.setItemMeta(itemMeta);
@@ -212,11 +212,11 @@ public class BuildTool extends Tool {
     private void loadSettings() {
         if(itemStack == null) return;
 
-        @Nullable ItemMeta itemMeta = itemStack.getItemMeta();
+        ItemMeta itemMeta = itemStack.getItemMeta();
         if(itemMeta == null) return;
         PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
 
-        @Nullable String materialName = pdc.get(BuildToolKeys.MATERIAL.getKey(), PersistentDataType.STRING);
+        String materialName = pdc.get(BuildToolKeys.MATERIAL.getKey(), PersistentDataType.STRING);
         if(materialName != null) {
             material = Material.getMaterial(materialName);
 
@@ -315,14 +315,14 @@ public class BuildTool extends Tool {
      * @param player The {@link Player} that initiated the build.
      * @return The {@link BuildToolResult}.
      */
-    public @NotNull BuildToolResult build(@NotNull Player player) {
+    public @NonNull BuildToolResult build(@NonNull Player player) {
         if(position1 == null) return BuildToolResult.POSITION_1_NOT_SET;
         if(position2 == null) return BuildToolResult.POSITION_2_NOT_SET;
         if(!position1.getWorld().getName().equals(position2.getWorld().getName())) return BuildToolResult.POSITIONS_DIFFERENT_WORLDS;
         if(material == null) return BuildToolResult.MATERIAL_NOT_SET;
         if(!material.isBlock()) return BuildToolResult.MATERIAL_NOT_BLOCK;
         if(!player.getInventory().contains(material)) return BuildToolResult.PLAYER_LACKS_MATERIALS;
-        @Nullable BuildToolConfig buildToolConfig = buildToolConfigurationManager.getConfiguration();
+        BuildToolConfig buildToolConfig = buildToolConfigurationManager.getConfiguration();
         if(buildToolConfig == null) return BuildToolResult.BUILD_TOOL_CONFIG_INVALID;
         if(buildToolConfig.restrictedWorlds().contains(position1.getWorld().getName())) return BuildToolResult.WORLD_NOT_ALLOWED;
 

@@ -41,8 +41,8 @@ import org.bukkit.inventory.meta.BlockDataMeta;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;
 
@@ -50,10 +50,10 @@ import java.util.Iterator;
  * This task manages the processing of a {@link BlockPlacementQueue}.
  */
 public class PlacementTask extends BukkitRunnable {
-    private final @NotNull SkyTools skyTools;
-    private final @NotNull BlockPlacementQueue blockPlacementQueue;
-    private final @NotNull ProtectionManager protectionManager;
-    private final @NotNull HookManager hookManager;
+    private final @NonNull SkyTools skyTools;
+    private final @NonNull BlockPlacementQueue blockPlacementQueue;
+    private final @NonNull ProtectionManager protectionManager;
+    private final @NonNull HookManager hookManager;
 
     private final int placementsPerRun;
 
@@ -66,10 +66,10 @@ public class PlacementTask extends BukkitRunnable {
      * @param placementsPerRun How many blocks to place per run.
      */
     public PlacementTask(
-            @NotNull SkyTools skyTools,
-            @NotNull BlockPlacementQueue blockPlacementQueue,
-            @NotNull ProtectionManager protectionManager,
-            @NotNull HookManager hookManager,
+            @NonNull SkyTools skyTools,
+            @NonNull BlockPlacementQueue blockPlacementQueue,
+            @NonNull ProtectionManager protectionManager,
+            @NonNull HookManager hookManager,
             int placementsPerRun) {
         this.skyTools = skyTools;
         this.blockPlacementQueue = blockPlacementQueue;
@@ -91,7 +91,7 @@ public class PlacementTask extends BukkitRunnable {
         int count = 0;
 
         while(count < placementsPerRun && !blockPlacementQueue.isEmpty()) {
-            @Nullable PlacementData placementData = blockPlacementQueue.peek();
+            PlacementData placementData = blockPlacementQueue.peek();
             if(placementData == null) continue;
             Material placementMaterial = placementData.material();
 
@@ -190,20 +190,20 @@ public class PlacementTask extends BukkitRunnable {
      * @return true if successful, false if not.
      */
     private boolean processStackedItemStack(
-            @NotNull Player player,
-            @NotNull Block block,
-            @NotNull Material placementMaterial,
-            @NotNull Inventory inventory,
-            @NotNull ItemStack invStack,
+            @NonNull Player player,
+            @NonNull Block block,
+            @NonNull Material placementMaterial,
+            @NonNull Inventory inventory,
+            @NonNull ItemStack invStack,
             int slot) {
         RoseStackerHook roseStackerHook = hookManager.getHook(RoseStackerHook.class);
         ItemMeta itemMeta = invStack.getItemMeta();
         if(itemMeta == null) return false;
 
         // Get the EntityType if a spawner
-        @Nullable EntityType entityType = null;
+        EntityType entityType = null;
         if(roseStackerHook.isHooked() && placementMaterial.equals(Material.SPAWNER)) {
-            @Nullable SpawnerType spawnerType = roseStackerHook.getSpawnerType(invStack);
+            SpawnerType spawnerType = roseStackerHook.getSpawnerType(invStack);
             if(spawnerType != null) {
                 if(!spawnerType.isEmpty()) {
                     entityType = spawnerType.get().orElse(null);
@@ -212,7 +212,7 @@ public class PlacementTask extends BukkitRunnable {
         }
 
         // Get the BlockData from the ItemStack
-        @Nullable BlockData blockData = getBlockData(invStack);
+        BlockData blockData = getBlockData(invStack);
 
         int invStackSize = roseStackerHook.getStackSize(invStack);
         if(invStackSize <= 0) return false;
@@ -245,18 +245,18 @@ public class PlacementTask extends BukkitRunnable {
      * @return true if successful, false if not.
      */
     private boolean processNonStackedItemStack(
-            @NotNull Player player,
-            @NotNull Block block,
-            @NotNull Material placementMaterial,
-            @NotNull Inventory inventory,
-            @NotNull ItemStack invStack,
+            @NonNull Player player,
+            @NonNull Block block,
+            @NonNull Material placementMaterial,
+            @NonNull Inventory inventory,
+            @NonNull ItemStack invStack,
             int slot) {
         // Get the ItemMeta
         ItemMeta itemMeta = invStack.getItemMeta();
         if(itemMeta == null) return false;
 
         // Get the BlockData from the ItemStack
-        @Nullable BlockData blockData = getBlockData(invStack);
+        BlockData blockData = getBlockData(invStack);
 
         // Calculate the item stack size
         int updatedAmount = invStack.getAmount() - 1;
@@ -278,13 +278,13 @@ public class PlacementTask extends BukkitRunnable {
      * @param itemStack The {@link ItemStack}.
      * @return The {@link BlockData} or null if it has no block data.
      */
-    private @Nullable BlockData getBlockData(@NotNull ItemStack itemStack) {
+    private @Nullable BlockData getBlockData(@NonNull ItemStack itemStack) {
         // Get the ItemMeta
         ItemMeta itemMeta = itemStack.getItemMeta();
         if(itemMeta == null) return null;
 
         // Get the BlockData from the ItemMeta
-        @Nullable BlockData blockData = null;
+        BlockData blockData = null;
         if(itemMeta instanceof BlockDataMeta blockDataMeta) {
             if(blockDataMeta.hasBlockData()) {
                 blockData = blockDataMeta.getBlockData(itemStack.getType());
@@ -307,9 +307,9 @@ public class PlacementTask extends BukkitRunnable {
      * @param entityType The {@link EntityType} or null.
      */
     private void placeBlock(
-            @NotNull Player player,
-            @NotNull Block block,
-            @NotNull Material placementMaterial,
+            @NonNull Player player,
+            @NonNull Block block,
+            @NonNull Material placementMaterial,
             @Nullable BlockData blockData,
             @Nullable EntityType entityType) {
         BlockState originalState = block.getState(true);

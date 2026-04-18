@@ -18,7 +18,7 @@
 package com.github.lukesky19.skyTools.buildTool.util;
 
 import org.bukkit.NamespacedKey;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * This enum contains the {@link NamespacedKey}s used for the build tool.
@@ -57,7 +57,7 @@ public enum BuildToolKeys {
      * Get the {@link NamespacedKey}.
      * @return The {@link NamespacedKey}.
      */
-    public @NotNull NamespacedKey getKey() {
+    public @NonNull NamespacedKey getKey() {
         return key;
     }
 }

@@ -23,23 +23,23 @@ import com.github.lukesky19.skyTools.core.configuration.data.Locale;
 import com.github.lukesky19.skyTools.core.configuration.manager.LocaleManager;
 import com.github.lukesky19.skyTools.mobTool.command.MobCaptureToolCommand;
 import com.github.lukesky19.skyTools.mobTool.tool.MobCaptureToolManager;
-import com.github.lukesky19.skylib.api.adventure.AdventureUtil;
-import com.github.lukesky19.skylib.api.common.abstracts.SkyPlugin;
+import com.github.lukesky19.skylib.common.api.adventure.AdventureUtility;
+import com.github.lukesky19.skylib.paper.api.plugin.SkyPlugin;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * This class creates the main /skytools command to register.
  */
 public class SkyToolsCommand {
-    private final @NotNull SkyPlugin skyPlugin;
-    private final @NotNull LocaleManager localeManager;
-    private final @NotNull BuildToolManager buildToolManager;
-    private final @NotNull MobCaptureToolManager mobCaptureToolManager;
+    private final @NonNull SkyPlugin skyPlugin;
+    private final @NonNull LocaleManager localeManager;
+    private final @NonNull BuildToolManager buildToolManager;
+    private final @NonNull MobCaptureToolManager mobCaptureToolManager;
 
     /**
      * Constructor
@@ -49,10 +49,10 @@ public class SkyToolsCommand {
      * @param mobCaptureToolManager A {@link MobCaptureToolManager} instance.
      */
     public SkyToolsCommand(
-            @NotNull SkyPlugin skyPlugin,
-            @NotNull LocaleManager localeManager,
-            @NotNull BuildToolManager buildToolManager,
-            @NotNull MobCaptureToolManager mobCaptureToolManager) {
+            @NonNull SkyPlugin skyPlugin,
+            @NonNull LocaleManager localeManager,
+            @NonNull BuildToolManager buildToolManager,
+            @NonNull MobCaptureToolManager mobCaptureToolManager) {
         this.skyPlugin = skyPlugin;
         this.localeManager = localeManager;
         this.buildToolManager = buildToolManager;
@@ -63,7 +63,7 @@ public class SkyToolsCommand {
      * Creates the {@link LiteralCommandNode} of type {@link CommandSourceStack} to register using the Lifecycle API for the /skytools command.
      * @return A {@link LiteralCommandNode} of type {@link CommandSourceStack} to register using the Lifecycle API for the /skytools command.
      */
-    public @NotNull LiteralCommandNode<CommandSourceStack> createCommand() {
+    public @NonNull LiteralCommandNode<CommandSourceStack> createCommand() {
         return Commands.literal("skytools")
                 .requires(ctx -> ctx.getSender().hasPermission("skytools.commands.skytools"))
                 .then(Commands.literal("help")
@@ -73,7 +73,7 @@ public class SkyToolsCommand {
 
                             CommandSender sender = ctx.getSource().getSender();
                             for(String message : locale.help()) {
-                                sender.sendMessage(AdventureUtil.deserialize(message));
+                                sender.sendMessage(AdventureUtility.deserialize(message));
                             }
 
                             return 1;
@@ -88,9 +88,9 @@ public class SkyToolsCommand {
                             skyPlugin.reload();
 
                             if(sender instanceof Player) {
-                                sender.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.reload()));
+                                sender.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.reload()));
                             } else {
-                                sender.sendMessage(AdventureUtil.deserialize(locale.reload()));
+                                sender.sendMessage(AdventureUtility.deserialize(locale.reload()));
                             }
 
                             return 1;

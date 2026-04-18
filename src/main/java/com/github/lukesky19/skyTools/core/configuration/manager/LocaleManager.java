@@ -19,11 +19,11 @@ package com.github.lukesky19.skyTools.core.configuration.manager;
 
 import com.github.lukesky19.skyTools.core.configuration.data.Locale;
 import com.github.lukesky19.skyTools.core.configuration.data.Settings;
-import com.github.lukesky19.skylib.api.adventure.AdventureUtil;
-import com.github.lukesky19.skylib.api.common.abstracts.SkyPlugin;
-import com.github.lukesky19.skylib.api.common.abstracts.config.SimpleConfigManager;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.github.lukesky19.skylib.common.api.adventure.AdventureUtility;
+import com.github.lukesky19.skylib.common.api.configuration.abstracts.SimpleConfigManager;
+import com.github.lukesky19.skylib.paper.api.plugin.SkyPlugin;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -33,15 +33,15 @@ import java.util.List;
  * This class manages the plugin's locale.
  */
 public class LocaleManager extends SimpleConfigManager<Locale> {
-    private final @NotNull SimpleConfigManager<Settings> settingsManager;
-    private @NotNull Locale DEFAULT_LOCALE;
+    private final @NonNull SimpleConfigManager<Settings> settingsManager;
+    private @NonNull Locale DEFAULT_LOCALE;
 
     /**
      * Constructor
      * @param plugin A {@link SkyPlugin}.
      * @param settingsManager A {@link SettingsManager} instance.
      */
-    public LocaleManager(@NotNull SkyPlugin plugin, @NotNull SimpleConfigManager<Settings> settingsManager) {
+    public LocaleManager(@NonNull SkyPlugin plugin, @NonNull SimpleConfigManager<Settings> settingsManager) {
         super(plugin, Locale.class);
         this.settingsManager = settingsManager;
 
@@ -53,7 +53,7 @@ public class LocaleManager extends SimpleConfigManager<Locale> {
      * @return The plugin's locale if not null or the default locale otherwise.
      */
     @Override
-    public @NotNull Locale getConfiguration() {
+    public @NonNull Locale getConfiguration() {
         if(configuration == null) return DEFAULT_LOCALE;
         return configuration;
     }
@@ -62,24 +62,24 @@ public class LocaleManager extends SimpleConfigManager<Locale> {
     public void loadConfiguration() {
         Settings settings = settingsManager.getConfiguration();
         if(settings == null) {
-            logger.error(AdventureUtil.deserialize("<red>Failed to load plugin's locale due to plugin settings being null.</red>"));
+            logger.error(AdventureUtility.plain("Failed to load plugin's locale due to plugin settings being null."));
             return;
         }
         if(settings.locale() == null) {
-            logger.error(AdventureUtil.deserialize("<red>Failed to load plugin's locale to use in settings.yml is null.</red>"));
+            logger.error(AdventureUtility.plain("Failed to load plugin's locale to use in settings.yml is null."));
             return;
         }
 
         String localeString = settings.locale();
-        Path path = Path.of(plugin.getDataFolder() + File.separator + "locale" + File.separator + (localeString + ".yml"));
+        Path path = Path.of(plugin.getDirectoryFile() + File.separator + "locale" + File.separator + (localeString + ".yml"));
         setConfigurationPath(path);
 
         super.loadConfiguration();
     }
 
     @Override
-    public void saveBundledConfig() {
-        Path path = Path.of(plugin.getDataFolder() + File.separator + "locale" + File.separator + "en_US.yml");
+    public void saveDefaultConfiguration() {
+        Path path = Path.of(plugin.getDirectoryFile() + File.separator + "locale" + File.separator + "en_US.yml");
         if(!path.toFile().exists()) {
             plugin.saveResource("locale" + File.separator + "en_US.yml", false);
         }
@@ -91,7 +91,7 @@ public class LocaleManager extends SimpleConfigManager<Locale> {
      * @return The migrated {@link Locale} or null if migration failed.
      */
     @Override
-    public @Nullable Locale migrateConfiguration(@NotNull Locale locale) {
+    public @Nullable Locale migrateConfiguration(@NonNull Locale locale) {
         return locale;
     }
 
@@ -126,8 +126,8 @@ public class LocaleManager extends SimpleConfigManager<Locale> {
                 || configuration.mobCaptureTool().noAccess()  == null) {
             this.configuration = null;
 
-            logger.error(AdventureUtil.deserialize("Your locale is missing one of the plugin's messages. The default locale will be used."));
-            logger.info(AdventureUtil.deserialize("You can regenerate your locale file by deleting it or adding the missing messages to resolve the issue."));
+            logger.warn(AdventureUtility.plain("Your locale is missing one of the plugin's messages. The default locale will be used."));
+            logger.info(AdventureUtility.plain("You can regenerate your locale file by deleting it or adding the missing messages to resolve the issue."));
 
             return false;
         }

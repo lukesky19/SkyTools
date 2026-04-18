@@ -26,19 +26,19 @@ import com.github.lukesky19.skyTools.core.configuration.data.Settings;
 import com.github.lukesky19.skyTools.core.configuration.manager.SettingsManager;
 import com.github.lukesky19.skyTools.core.integration.HookManager;
 import com.github.lukesky19.skyTools.core.integration.ProtectionManager;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * This class manages the plugin's tasks.
  */
 public class TaskManager {
-    private final @NotNull SkyTools skyTools;
-    private final @NotNull SettingsManager settingsManager;
-    private final @NotNull BuildToolManager buildToolManager;
-    private final @NotNull BlockPlacementQueue blockPlacementQueue;
-    private final @NotNull ProtectionManager protectionManager;
-    private final @NotNull HookManager hookManager;
+    private final @NonNull SkyTools skyTools;
+    private final @NonNull SettingsManager settingsManager;
+    private final @NonNull BuildToolManager buildToolManager;
+    private final @NonNull BlockPlacementQueue blockPlacementQueue;
+    private final @NonNull ProtectionManager protectionManager;
+    private final @NonNull HookManager hookManager;
 
     private @Nullable PlacementTask placementTask;
     private @Nullable HighlightTask highlightTask;
@@ -53,12 +53,12 @@ public class TaskManager {
      * @param hookManager A {@link HookManager} instance.
      */
     public TaskManager(
-            @NotNull SkyTools skyTools,
-            @NotNull SettingsManager settingsManager,
-            @NotNull BuildToolManager buildToolManager,
-            @NotNull BlockPlacementQueue blockPlacementQueue,
-            @NotNull ProtectionManager protectionManager,
-            @NotNull HookManager hookManager) {
+            @NonNull SkyTools skyTools,
+            @NonNull SettingsManager settingsManager,
+            @NonNull BuildToolManager buildToolManager,
+            @NonNull BlockPlacementQueue blockPlacementQueue,
+            @NonNull ProtectionManager protectionManager,
+            @NonNull HookManager hookManager) {
         this.skyTools = skyTools;
         this.settingsManager = settingsManager;
         this.buildToolManager = buildToolManager;

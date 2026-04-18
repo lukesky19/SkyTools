@@ -18,7 +18,7 @@
 package com.github.lukesky19.skyTools.core.configuration.data;
 
 import com.github.lukesky19.skylib.libs.configurate.objectmapping.ConfigSerializable;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -37,8 +37,8 @@ public record Locale(
         String prefix,
         List<String> help,
         String reload,
-        @NotNull BuildToolMessages buildTool,
-        @NotNull MobCaptureToolMessages mobCaptureTool) {
+        @NonNull BuildToolMessages buildTool,
+        @NonNull MobCaptureToolMessages mobCaptureTool) {
     /**
      * The locale messages for the build tool.
      * @param toolGiven The message sent to the command executor who give a player a build tool.

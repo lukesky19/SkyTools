@@ -27,20 +27,19 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 /**
  * This class listens for the usage of a mob capture tool.
  */
 public class MobCaptureListener implements Listener {
-    private final @NotNull MobCaptureToolManager mobCaptureToolManager;
+    private final @NonNull MobCaptureToolManager mobCaptureToolManager;
 
     /**
      * Constructor
      * @param mobCaptureToolManager A {@link MobCaptureToolManager} instance.
      */
-    public MobCaptureListener(@NotNull MobCaptureToolManager mobCaptureToolManager) {
+    public MobCaptureListener(@NonNull MobCaptureToolManager mobCaptureToolManager) {
         this.mobCaptureToolManager = mobCaptureToolManager;
     }
 
@@ -54,9 +53,9 @@ public class MobCaptureListener implements Listener {
         Entity entity = playerInteractEntityEvent.getRightClicked();
 
         EquipmentSlot equipmentSlot = playerInteractEntityEvent.getHand();
-        @NotNull ItemStack itemStack = player.getInventory().getItem(equipmentSlot);
+        ItemStack itemStack = player.getInventory().getItem(equipmentSlot);
         if(itemStack.isEmpty()) return;
-        @Nullable MobCaptureTool mobCaptureTool = mobCaptureToolManager.getMobCaptureTool(player, itemStack, equipmentSlot);
+        MobCaptureTool mobCaptureTool = mobCaptureToolManager.getMobCaptureTool(player, itemStack, equipmentSlot);
         if(mobCaptureTool == null) return;
 
         playerInteractEntityEvent.setCancelled(true);

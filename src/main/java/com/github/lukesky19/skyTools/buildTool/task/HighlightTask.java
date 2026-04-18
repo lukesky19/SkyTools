@@ -19,14 +19,13 @@ package com.github.lukesky19.skyTools.buildTool.task;
 
 import com.github.lukesky19.skyTools.buildTool.tool.BuildTool;
 import com.github.lukesky19.skyTools.buildTool.tool.BuildToolManager;
-import com.github.lukesky19.skylib.api.common.abstracts.SkyPlugin;
+import com.github.lukesky19.skylib.paper.api.plugin.SkyPlugin;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import static com.github.lukesky19.skyTools.buildTool.util.PluginUtils.getHollowCube;
 
@@ -35,14 +34,14 @@ import static com.github.lukesky19.skyTools.buildTool.util.PluginUtils.getHollow
  */
 public class HighlightTask extends BukkitRunnable {
     private final SkyPlugin skyPlugin;
-    private final @NotNull BuildToolManager buildToolManager;
+    private final @NonNull BuildToolManager buildToolManager;
 
     /**
      * Constructor
      * @param skyPlugin A {@link SkyPlugin} instance.
      * @param buildToolManager A {@link BuildToolManager} instance.
      */
-    public HighlightTask(SkyPlugin skyPlugin, @NotNull BuildToolManager buildToolManager) {
+    public HighlightTask(SkyPlugin skyPlugin, @NonNull BuildToolManager buildToolManager) {
         this.skyPlugin = skyPlugin;
         this.buildToolManager = buildToolManager;
     }
@@ -53,7 +52,7 @@ public class HighlightTask extends BukkitRunnable {
     @Override
     public void run() {
         for(Player player : skyPlugin.getServer().getOnlinePlayers()) {
-            @Nullable BuildTool buildTool = buildToolManager.getBuildTool(player.getInventory().getItemInMainHand());
+            BuildTool buildTool = buildToolManager.getBuildTool(player.getInventory().getItemInMainHand());
             if(buildTool == null) continue;
 
             highlightArea(player, buildTool);
@@ -65,9 +64,9 @@ public class HighlightTask extends BukkitRunnable {
      * @param player The {@link Player}.
      * @param buildTool The {@link BuildTool}.
      */
-    private void highlightArea(@NotNull Player player, @NotNull BuildTool buildTool) {
-        @Nullable Location position1 = buildTool.getPosition1();
-        @Nullable Location position2 = buildTool.getPosition2();
+    private void highlightArea(@NonNull Player player, @NonNull BuildTool buildTool) {
+        Location position1 = buildTool.getPosition1();
+        Location position2 = buildTool.getPosition2();
 
         // Highlight position 1 with particles
         if(position1 != null) {

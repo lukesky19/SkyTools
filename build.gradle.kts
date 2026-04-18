@@ -1,10 +1,10 @@
 plugins {
-    java
+    `java-library`
     `maven-publish`
 }
 
 group = "com.github.lukesky19"
-version = "0.1.3.0"
+version = "0.2.0.0"
 
 repositories {
     mavenCentral()
@@ -17,12 +17,15 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
-    compileOnly("com.github.lukesky19:SkyLib:1.5.0.0")
+    // Paper
+    compileOnly("io.papermc.paper:paper-api:26.1.2.build.+")
 
-    // Hooks
+    // SkyLib
+    compileOnly("com.github.lukesky19:SkyLib:2.0.0.0")
+
+    // Integration
     compileOnly("world.bentobox:bentobox:2.7.0-SNAPSHOT")
-    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.14")
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.16")
     compileOnly("dev.rosewood:rosestacker:1.5.37")
     compileOnly("dev.lone:api-itemsadder:4.0.10")
     compileOnly("com.github.lukesky19:SkyHoppers:1.2.0.0")
@@ -30,7 +33,7 @@ dependencies {
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
 }
 
 tasks {

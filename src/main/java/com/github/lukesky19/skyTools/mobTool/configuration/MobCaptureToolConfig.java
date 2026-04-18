@@ -17,9 +17,9 @@
 */
 package com.github.lukesky19.skyTools.mobTool.configuration;
 
-import com.github.lukesky19.skylib.api.itemstack.ItemStackConfig;
 import com.github.lukesky19.skylib.libs.configurate.objectmapping.ConfigSerializable;
-import org.jetbrains.annotations.NotNull;
+import com.github.lukesky19.skylib.paper.api.itemstack.ItemStackConfig;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -33,6 +33,6 @@ import java.util.List;
 @ConfigSerializable
 public record MobCaptureToolConfig(
         int version,
-        @NotNull List<String> restrictedWorlds,
-        @NotNull List<String> restrictedRegions,
-        @NotNull ItemStackConfig item) {}
+        @NonNull List<String> restrictedWorlds,
+        @NonNull List<String> restrictedRegions,
+        @NonNull ItemStackConfig item) {}

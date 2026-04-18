@@ -19,23 +19,22 @@ package com.github.lukesky19.skyTools.core.integration.impl;
 
 import com.github.lukesky19.skyHoppers.SkyHoppersAPI;
 import com.github.lukesky19.skyTools.core.integration.Hook;
-import com.github.lukesky19.skylib.api.common.abstracts.SkyPlugin;
+import com.github.lukesky19.skylib.paper.api.plugin.SkyPlugin;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 /**
  * This class manages interfacing with SkyShop.
  */
 public class SkyShopHook implements Hook {
-    private final @NotNull SkyPlugin plugin;
+    private final @NonNull SkyPlugin plugin;
     private boolean hooked = false;
 
     /**
      * Constructor
      * @param plugin A {@link SkyPlugin} instance.
      */
-    public SkyShopHook(@NotNull SkyPlugin plugin) {
+    public SkyShopHook(@NonNull SkyPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -44,7 +43,7 @@ public class SkyShopHook implements Hook {
      */
     @Override
     public void initialize() {
-        @Nullable Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("SkyPlayTime");
+        Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("SkyPlayTime");
 
         hooked = plugin != null && plugin.isEnabled();
     }

@@ -20,7 +20,7 @@ package com.github.lukesky19.skyTools.buildTool.util;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -31,6 +31,6 @@ import java.util.List;
  * @param positionList The {@link List} of {@link Location}s to place blocks at.
  */
 public record PlacementData(
-        @NotNull Player player,
-        @NotNull Material material,
-        @NotNull List<Location> positionList) {}
+        @NonNull Player player,
+        @NonNull Material material,
+        @NonNull List<Location> positionList) {}

@@ -30,18 +30,18 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * This class manages the creation and validation of {@link MobCaptureTool}s.
  */
 public class MobCaptureToolManager {
-    private final @NotNull ComponentLogger logger;
-    private final @NotNull LocaleManager localeManager;
-    private final @NotNull HookManager hookManager;
-    private final @NotNull ProtectionManager protectionManager;
-    private final @NotNull MobCaptureToolConfigurationManager mobCaptureToolConfigurationManager;
+    private final @NonNull ComponentLogger logger;
+    private final @NonNull LocaleManager localeManager;
+    private final @NonNull HookManager hookManager;
+    private final @NonNull ProtectionManager protectionManager;
+    private final @NonNull MobCaptureToolConfigurationManager mobCaptureToolConfigurationManager;
 
     /**
      * Constructor
@@ -52,11 +52,11 @@ public class MobCaptureToolManager {
      * @param mobCaptureToolConfigurationManager A {@link MobCaptureToolConfigurationManager} instance.
      */
     public MobCaptureToolManager(
-            @NotNull ComponentLogger logger,
-            @NotNull LocaleManager localeManager,
-            @NotNull HookManager hookManager,
-            @NotNull ProtectionManager protectionManager,
-            @NotNull MobCaptureToolConfigurationManager mobCaptureToolConfigurationManager) {
+            @NonNull ComponentLogger logger,
+            @NonNull LocaleManager localeManager,
+            @NonNull HookManager hookManager,
+            @NonNull ProtectionManager protectionManager,
+            @NonNull MobCaptureToolConfigurationManager mobCaptureToolConfigurationManager) {
         this.logger = logger;
         this.localeManager = localeManager;
         this.hookManager = hookManager;
@@ -70,7 +70,7 @@ public class MobCaptureToolManager {
      * @param uses The number of uses the mob capture tool has. Use -1 for infinite.
      * @return The {@link ItemStack} or null.
      */
-    public @Nullable ItemStack createMobCaptureTool(@NotNull Player player, int uses) {
+    public @Nullable ItemStack createMobCaptureTool(@NonNull Player player, int uses) {
         MobCaptureTool mobCaptureTool = new MobCaptureTool(logger, localeManager, mobCaptureToolConfigurationManager, hookManager, protectionManager, player);
 
         return mobCaptureTool.createTool(uses);
@@ -83,7 +83,7 @@ public class MobCaptureToolManager {
      * @param equipmentSlot The {@link EquipmentSlot} the item is in.
      * @return The {@link MobCaptureTool} or null if not a mob capture tool.
      */
-    public @Nullable MobCaptureTool getMobCaptureTool(@NotNull Player player, @NotNull ItemStack itemStack, @NotNull EquipmentSlot equipmentSlot) {
+    public @Nullable MobCaptureTool getMobCaptureTool(@NonNull Player player, @NonNull ItemStack itemStack, @NonNull EquipmentSlot equipmentSlot) {
         if(!isMobCaptureTool(itemStack)) return null;
 
         return new MobCaptureTool(logger, localeManager, mobCaptureToolConfigurationManager, hookManager, protectionManager, player, itemStack, equipmentSlot);
@@ -94,8 +94,8 @@ public class MobCaptureToolManager {
      * @param itemStack The {@link ItemStack}.
      * @return true if a mob capture tool, or false if not.
      */
-    public boolean isMobCaptureTool(@NotNull ItemStack itemStack) {
-        @Nullable ItemMeta itemMeta = itemStack.getItemMeta();
+    public boolean isMobCaptureTool(@NonNull ItemStack itemStack) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
         if(itemMeta == null) return false;
         PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
 
@@ -107,8 +107,8 @@ public class MobCaptureToolManager {
      * @param itemStack The {@link ItemStack}.
      * @return true if a custom spawn egg, or false if not.
      */
-    public boolean isCustomSpawnEgg(@NotNull ItemStack itemStack) {
-        @Nullable ItemMeta itemMeta = itemStack.getItemMeta();
+    public boolean isCustomSpawnEgg(@NonNull ItemStack itemStack) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
         if(itemMeta == null) return false;
         PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
 

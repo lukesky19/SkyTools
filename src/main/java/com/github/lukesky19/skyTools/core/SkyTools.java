@@ -33,8 +33,8 @@ import com.github.lukesky19.skyTools.mobTool.configuration.MobCaptureToolConfigu
 import com.github.lukesky19.skyTools.mobTool.listener.MobCaptureListener;
 import com.github.lukesky19.skyTools.mobTool.listener.MobSpawnListener;
 import com.github.lukesky19.skyTools.mobTool.tool.MobCaptureToolManager;
-import com.github.lukesky19.skylib.api.adventure.AdventureUtil;
-import com.github.lukesky19.skylib.api.common.abstracts.SkyPlugin;
+import com.github.lukesky19.skylib.common.api.adventure.AdventureUtility;
+import com.github.lukesky19.skylib.paper.api.plugin.SkyPlugin;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -137,14 +137,14 @@ public final class SkyTools extends SkyPlugin {
         if(skyLib != null && skyLib.isEnabled()) {
             String version = skyLib.getPluginMeta().getVersion();
             String[] splitVersion = version.split("\\.");
-            int second = Integer.parseInt(splitVersion[1]);
+            int first = Integer.parseInt(splitVersion[0]);
 
-            if(second >= 4) {
+            if(first >= 2) {
                 return true;
             }
         }
 
-        this.getComponentLogger().error(AdventureUtil.deserialize("SkyLib Version 1.4.0.0 or newer is required to run this plugin."));
+        this.getComponentLogger().error(AdventureUtility.deserialize("SkyLib Version 2.0.0.0 or newer is required to run this plugin."));
         this.getServer().getPluginManager().disablePlugin(this);
         return false;
     }

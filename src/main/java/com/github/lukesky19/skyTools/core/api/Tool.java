@@ -18,7 +18,7 @@
 package com.github.lukesky19.skyTools.core.api;
 
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * This class can be extended to create a new tool.

@@ -17,10 +17,10 @@
 */
 package com.github.lukesky19.skyTools.buildTool.configuration;
 
-import com.github.lukesky19.skylib.api.common.abstracts.SkyPlugin;
-import com.github.lukesky19.skylib.api.common.abstracts.config.SimpleConfigManager;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.github.lukesky19.skylib.common.api.configuration.abstracts.SimpleConfigManager;
+import com.github.lukesky19.skylib.paper.api.plugin.SkyPlugin;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -33,7 +33,7 @@ public class BuildToolConfigurationManager extends SimpleConfigManager<BuildTool
      * Constructor
      * @param plugin A {@link SkyPlugin} instance.
      */
-    public BuildToolConfigurationManager(@NotNull SkyPlugin plugin) {
+    public BuildToolConfigurationManager(@NonNull SkyPlugin plugin) {
         super(plugin, Path.of(plugin.getDataFolder() + File.separator + "tools" + File.separator + "build_tool.yml"), BuildToolConfig.class);
     }
 
@@ -41,7 +41,7 @@ public class BuildToolConfigurationManager extends SimpleConfigManager<BuildTool
      * Save the bundled build tool configuration if it doesn't exist.
      */
     @Override
-    protected void saveBundledConfig() {
+    public void saveDefaultConfiguration() {
         plugin.saveResource("tools" + File.separator + "build_tool.yml", false);
     }
 
@@ -51,7 +51,7 @@ public class BuildToolConfigurationManager extends SimpleConfigManager<BuildTool
      * @return The {@link BuildToolConfig}.
      */
     @Override
-    public @Nullable BuildToolConfig migrateConfiguration(@NotNull BuildToolConfig buildToolConfig) {
+    public @Nullable BuildToolConfig migrateConfiguration(@NonNull BuildToolConfig buildToolConfig) {
         return buildToolConfig;
     }
 

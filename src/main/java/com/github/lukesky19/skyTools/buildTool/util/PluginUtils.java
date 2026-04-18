@@ -20,7 +20,7 @@ package com.github.lukesky19.skyTools.buildTool.util;
 import com.github.lukesky19.skyTools.core.integration.impl.WorldGuardHook;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,11 +45,11 @@ public class PluginUtils {
      * @param position2 The second position.
      * @return A {@link List} of {@link Location}s.
      */
-    public static @NotNull List<Location> getLocationsInArea(
-            @NotNull WorldGuardHook worldGuardHook,
-            @NotNull List<String> disallowedRegions,
-            @NotNull Location position1,
-            @NotNull Location position2) {
+    public static @NonNull List<Location> getLocationsInArea(
+            @NonNull WorldGuardHook worldGuardHook,
+            @NonNull List<String> disallowedRegions,
+            @NonNull Location position1,
+            @NonNull Location position2) {
         if(!position1.getWorld().getName().equals(position2.getWorld().getName())) return new ArrayList<>();
         World world = position1.getWorld();
 
@@ -84,7 +84,7 @@ public class PluginUtils {
      * @param particleDistance The distance between particles.
      * @return A List of Locations
      */
-    public static @NotNull List<Location> getHollowCube(@NotNull Location corner1, @NotNull Location corner2, double particleDistance) {
+    public static @NonNull List<Location> getHollowCube(@NonNull Location corner1, @NonNull Location corner2, double particleDistance) {
         List<Location> particleLocations = new ArrayList<>();
 
         // If the corners are not in the same world or the world is null, return an empty list.
@@ -138,9 +138,9 @@ public class PluginUtils {
      * @return true if disallowed, false if allowed.
      */
     private static boolean isLocationDisallowed(
-            @NotNull WorldGuardHook worldGuardHook,
-            @NotNull List<String> disallowedRegions,
-            @NotNull Location location) {
+            @NonNull WorldGuardHook worldGuardHook,
+            @NonNull List<String> disallowedRegions,
+            @NonNull Location location) {
         if(worldGuardHook.isHooked()) {
             List<String> effectiveRegions = worldGuardHook.getRegionNames(location);
 

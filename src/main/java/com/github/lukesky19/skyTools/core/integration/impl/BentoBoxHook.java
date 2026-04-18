@@ -18,11 +18,11 @@
 package com.github.lukesky19.skyTools.core.integration.impl;
 
 import com.github.lukesky19.skyTools.core.integration.Hook;
-import com.github.lukesky19.skylib.api.common.abstracts.SkyPlugin;
+import com.github.lukesky19.skylib.paper.api.plugin.SkyPlugin;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.objects.Island;
@@ -34,14 +34,14 @@ import java.util.Optional;
  * This class manages interfacing with BentoBox.
  */
 public class BentoBoxHook implements Hook {
-    private final @NotNull SkyPlugin skyPlugin;
+    private final @NonNull SkyPlugin skyPlugin;
     private @Nullable BentoBox bentoBox;
 
     /**
      * Constructor
      * @param skyPlugin A {@link SkyPlugin} instance.
      */
-    public BentoBoxHook(@NotNull SkyPlugin skyPlugin) {
+    public BentoBoxHook(@NonNull SkyPlugin skyPlugin) {
         this.skyPlugin = skyPlugin;
     }
 
@@ -63,7 +63,7 @@ public class BentoBoxHook implements Hook {
      * @param location The {@link Location}.
      * @return true if they can, false if not.
      */
-    public boolean canPlayerPlaceBlocks(@NotNull Player player, @NotNull Location location) {
+    public boolean canPlayerPlaceBlocks(@NonNull Player player, @NonNull Location location) {
         if(bentoBox == null) return true;
 
         Optional<Island> optionalIsland = bentoBox.getIslands().getIslandAt(location);
@@ -81,7 +81,7 @@ public class BentoBoxHook implements Hook {
      * @param location The {@link Location}.
      * @return true if the player can, or false if not.
      */
-    public boolean canPlayerInteractEntity(@NotNull Player player, @NotNull Location location) {
+    public boolean canPlayerInteractEntity(@NonNull Player player, @NonNull Location location) {
         if(bentoBox == null) return true;
 
         Optional<Island> optionalIsland = bentoBox.getIslands().getIslandAt(location);

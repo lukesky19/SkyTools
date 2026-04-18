@@ -18,9 +18,9 @@
 package com.github.lukesky19.skyTools.core.integration;
 
 import com.github.lukesky19.skyTools.core.integration.impl.*;
-import com.github.lukesky19.skylib.api.common.abstracts.SkyPlugin;
+import com.github.lukesky19.skylib.paper.api.plugin.SkyPlugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,13 +29,13 @@ import java.util.Map;
  * This class manages hooks.
  */
 public class HookManager {
-    private final @NotNull Map<Class<?>, Hook> hooks = new HashMap<>();
+    private final @NonNull Map<Class<?>, Hook> hooks = new HashMap<>();
 
     /**
      * Constructor
      * @param plugin A {@link JavaPlugin} instance.
      */
-    public HookManager(@NotNull SkyPlugin plugin) {
+    public HookManager(@NonNull SkyPlugin plugin) {
         BentoBoxHook bentoBoxHook = new BentoBoxHook(plugin);
         registerHook(BentoBoxHook.class, bentoBoxHook);
 
@@ -61,7 +61,7 @@ public class HookManager {
      * @param hook The class instance.
      * @param <T> Parameter for any class that extends {@link Hook}.
      */
-    public <T extends Hook> void registerHook(@NotNull Class<T> hookClass, @NotNull Hook hook) {
+    public <T extends Hook> void registerHook(@NonNull Class<T> hookClass, @NonNull Hook hook) {
         hooks.put(hookClass, hook);
         hook.initialize();
     }
@@ -72,7 +72,7 @@ public class HookManager {
      * @return The class instance.
      * @param <T> Parameter for any class that extends {@link Hook}.
      */
-    public @NotNull <T extends Hook> T getHook(@NotNull Class<T> hookClass) {
+    public @NonNull <T extends Hook> T getHook(@NonNull Class<T> hookClass) {
         return hookClass.cast(hooks.get(hookClass));
     }
 }

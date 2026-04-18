@@ -26,7 +26,7 @@ import com.github.lukesky19.skyTools.core.configuration.manager.LocaleManager;
 import com.github.lukesky19.skyTools.core.integration.HookManager;
 import com.github.lukesky19.skyTools.core.integration.impl.SkyHoppersHook;
 import com.github.lukesky19.skyTools.core.integration.impl.WorldGuardHook;
-import com.github.lukesky19.skylib.api.adventure.AdventureUtil;
+import com.github.lukesky19.skylib.common.api.adventure.AdventureUtility;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Location;
@@ -41,8 +41,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -50,10 +49,10 @@ import java.util.List;
  * This class listens for the usage of a build tool.
  */
 public class BuildToolListener implements Listener {
-    private final @NotNull LocaleManager localeManager;
-    private final @NotNull BuildToolConfigurationManager buildToolConfigurationManager;
-    private final @NotNull BuildToolManager buildToolManager;
-    private final @NotNull HookManager hookManager;
+    private final @NonNull LocaleManager localeManager;
+    private final @NonNull BuildToolConfigurationManager buildToolConfigurationManager;
+    private final @NonNull BuildToolManager buildToolManager;
+    private final @NonNull HookManager hookManager;
 
     /**
      * Constructor
@@ -63,10 +62,10 @@ public class BuildToolListener implements Listener {
      * @param hookManager A {@link HookManager} instance.
      */
     public BuildToolListener(
-            @NotNull LocaleManager localeManager,
-            @NotNull BuildToolConfigurationManager buildToolConfigurationManager,
-            @NotNull BuildToolManager buildToolManager,
-            @NotNull HookManager hookManager) {
+            @NonNull LocaleManager localeManager,
+            @NonNull BuildToolConfigurationManager buildToolConfigurationManager,
+            @NonNull BuildToolManager buildToolManager,
+            @NonNull HookManager hookManager) {
         this.localeManager = localeManager;
         this.buildToolConfigurationManager = buildToolConfigurationManager;
         this.buildToolManager = buildToolManager;
@@ -83,17 +82,17 @@ public class BuildToolListener implements Listener {
         EquipmentSlot hand = playerInteractEvent.getHand();
         if(hand == null || !hand.equals(EquipmentSlot.HAND)) return;
 
-        @Nullable ItemStack itemStack = playerInteractEvent.getItem();
+        ItemStack itemStack = playerInteractEvent.getItem();
         if(itemStack == null) return;
 //        if(!(itemStack.getItemMeta() instanceof BlockDataMeta)) return;
 
-        @Nullable BuildToolConfig buildToolConfig = buildToolConfigurationManager.getConfiguration();
+        BuildToolConfig buildToolConfig = buildToolConfigurationManager.getConfiguration();
         if(buildToolConfig == null) return;
 
-        @Nullable BuildTool buildTool = buildToolManager.getBuildTool(itemStack);
+        BuildTool buildTool = buildToolManager.getBuildTool(itemStack);
         if(buildTool == null) return;
 
-        @Nullable Block block = playerInteractEvent.getClickedBlock();
+        Block block = playerInteractEvent.getClickedBlock();
         if(block == null) return;
 
         Location location = block.getLocation();
@@ -101,34 +100,34 @@ public class BuildToolListener implements Listener {
 
         playerInteractEvent.setCancelled(true);
 
-        @NotNull Locale locale = localeManager.getConfiguration();
+        Locale locale = localeManager.getConfiguration();
         if(action.isLeftClick()) {
             if(player.isSneaking()) {
                 BuildTool.BuildToolResult buildToolResult = buildTool.build(player);
                 switch(buildToolResult) {
-                    case POSITION_1_NOT_SET -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().positionOneInvalid()));
+                    case POSITION_1_NOT_SET -> player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().positionOneInvalid()));
 
-                    case POSITION_2_NOT_SET -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().positionTwoInvalid()));
+                    case POSITION_2_NOT_SET -> player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().positionTwoInvalid()));
 
-                    case POSITIONS_DIFFERENT_WORLDS -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().positionsDifferentWorlds()));
+                    case POSITIONS_DIFFERENT_WORLDS -> player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().positionsDifferentWorlds()));
 
-                    case MATERIAL_NOT_SET -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().materialNotSet()));
+                    case MATERIAL_NOT_SET -> player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().materialNotSet()));
 
-                    case MATERIAL_NOT_BLOCK -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().materialNotBlock()));
+                    case MATERIAL_NOT_BLOCK -> player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().materialNotBlock()));
 
-                    case PLAYER_LACKS_MATERIALS -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().playerLacksMaterials()));
+                    case PLAYER_LACKS_MATERIALS -> player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().playerLacksMaterials()));
 
-                    case BUILD_TOOL_CONFIG_INVALID -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().configError()));
+                    case BUILD_TOOL_CONFIG_INVALID -> player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().configError()));
 
-                    case WORLD_NOT_ALLOWED -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().worldNotAllowed()));
+                    case WORLD_NOT_ALLOWED -> player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().worldNotAllowed()));
 
-                    case NO_LOCATIONS_FOUND -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().noLocationsFound()));
+                    case NO_LOCATIONS_FOUND -> player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().noLocationsFound()));
 
-                    case BUILD_QUEUED -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().buildQueued()));
+                    case BUILD_QUEUED -> player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().buildQueued()));
                 }
             } else {
                 if(isLocationDisallowed(hookManager.getHook(WorldGuardHook.class), buildToolConfig.restrictedWorlds(), buildToolConfig.restrictedRegions(), location)) {
-                    player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().noAccess()));
+                    player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().noAccess()));
                     return;
                 }
 
@@ -140,7 +139,7 @@ public class BuildToolListener implements Listener {
                         Placeholder.parsed("y", String.valueOf(location.getBlockY())),
                         Placeholder.parsed("z", String.valueOf(location.getBlockZ())));
 
-                player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().setPositionOne(), placeholderList));
+                player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().setPositionOne(), placeholderList));
 
                 buildTool.saveTool();
             }
@@ -148,29 +147,29 @@ public class BuildToolListener implements Listener {
             if(player.isSneaking()) {
                 BuildTool.BuildToolResult buildToolResult = buildTool.build(player);
                 switch(buildToolResult) {
-                    case POSITION_1_NOT_SET -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().positionOneInvalid()));
+                    case POSITION_1_NOT_SET -> player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().positionOneInvalid()));
 
-                    case POSITION_2_NOT_SET -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().positionTwoInvalid()));
+                    case POSITION_2_NOT_SET -> player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().positionTwoInvalid()));
 
-                    case POSITIONS_DIFFERENT_WORLDS -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().positionsDifferentWorlds()));
+                    case POSITIONS_DIFFERENT_WORLDS -> player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().positionsDifferentWorlds()));
 
-                    case MATERIAL_NOT_SET -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().materialNotSet()));
+                    case MATERIAL_NOT_SET -> player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().materialNotSet()));
 
-                    case MATERIAL_NOT_BLOCK ->  player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().materialNotBlock()));
+                    case MATERIAL_NOT_BLOCK ->  player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().materialNotBlock()));
 
-                    case PLAYER_LACKS_MATERIALS -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().playerLacksMaterials()));
+                    case PLAYER_LACKS_MATERIALS -> player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().playerLacksMaterials()));
 
-                    case BUILD_TOOL_CONFIG_INVALID -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().configError()));
+                    case BUILD_TOOL_CONFIG_INVALID -> player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().configError()));
 
-                    case WORLD_NOT_ALLOWED -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().worldNotAllowed()));
+                    case WORLD_NOT_ALLOWED -> player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().worldNotAllowed()));
 
-                    case NO_LOCATIONS_FOUND -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().noLocationsFound()));
+                    case NO_LOCATIONS_FOUND -> player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().noLocationsFound()));
 
-                    case BUILD_QUEUED -> player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().buildQueued()));
+                    case BUILD_QUEUED -> player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().buildQueued()));
                 }
             } else {
                 if(isLocationDisallowed(hookManager.getHook(WorldGuardHook.class), buildToolConfig.restrictedWorlds(), buildToolConfig.restrictedRegions(), location)) {
-                    player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().noAccess()));
+                    player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().noAccess()));
                     return;
                 }
 
@@ -182,7 +181,7 @@ public class BuildToolListener implements Listener {
                         Placeholder.parsed("y", String.valueOf(location.getBlockY())),
                         Placeholder.parsed("z", String.valueOf(location.getBlockZ())));
 
-                player.sendMessage(AdventureUtil.deserialize(locale.prefix() + locale.buildTool().setPositionTwo(), placeholderList));
+                player.sendMessage(AdventureUtility.deserialize(locale.prefix() + locale.buildTool().setPositionTwo(), placeholderList));
 
                 buildTool.saveTool();
             }
@@ -197,11 +196,11 @@ public class BuildToolListener implements Listener {
     public void onSelectMaterial(InventoryClickEvent inventoryClickEvent) {
         if(!(inventoryClickEvent.getWhoClicked() instanceof Player)) return;
         if(!(inventoryClickEvent.getClickedInventory() instanceof PlayerInventory)) return;
-        @NotNull ItemStack cursorItemStack = inventoryClickEvent.getCursor();
+        ItemStack cursorItemStack = inventoryClickEvent.getCursor();
         if(cursorItemStack.isEmpty()) return;
-        @Nullable ItemStack clickedItemStack = inventoryClickEvent.getCurrentItem();
+        ItemStack clickedItemStack = inventoryClickEvent.getCurrentItem();
         if(clickedItemStack == null || clickedItemStack.isEmpty()) return;
-        @Nullable BuildTool buildTool = buildToolManager.getBuildTool(clickedItemStack);
+        BuildTool buildTool = buildToolManager.getBuildTool(clickedItemStack);
         if(buildTool == null) return;
 
         inventoryClickEvent.setCancelled(true);
@@ -226,10 +225,10 @@ public class BuildToolListener implements Listener {
      * @return true if disallowed, false if allowed.
      */
     private boolean isLocationDisallowed(
-            @NotNull WorldGuardHook worldGuardHook,
-            @NotNull List<String> disallowedWorlds,
-            @NotNull List<String> disallowedRegions,
-            @NotNull Location location) {
+            @NonNull WorldGuardHook worldGuardHook,
+            @NonNull List<String> disallowedWorlds,
+            @NonNull List<String> disallowedRegions,
+            @NonNull Location location) {
         if(disallowedWorlds.contains(location.getWorld().getName())) return true;
 
         if(worldGuardHook.isHooked()) {

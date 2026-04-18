@@ -22,16 +22,16 @@ import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * This event is fired when a build tool places a block for a player.
  */
 public class BuildToolPlaceBlockEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
-    private final @NotNull Player player;
-    private final @NotNull Block block;
-    private final @NotNull BlockState blockState;
+    private final @NonNull Player player;
+    private final @NonNull Block block;
+    private final @NonNull BlockState blockState;
 
     /**
      * Constructor
@@ -40,9 +40,9 @@ public class BuildToolPlaceBlockEvent extends Event {
      * @param blockState The {@link BlockState} from before the block was modified.
      */
     public BuildToolPlaceBlockEvent(
-            @NotNull Player player,
-            @NotNull Block block,
-            @NotNull BlockState blockState) {
+            @NonNull Player player,
+            @NonNull Block block,
+            @NonNull BlockState blockState) {
         this.player = player;
         this.block = block;
         this.blockState = blockState;
@@ -52,7 +52,7 @@ public class BuildToolPlaceBlockEvent extends Event {
      * Get the {@link Player} making the purchase.
      * @return The {@link Player} making the purchase.
      */
-    public @NotNull Player getPlayer() {
+    public @NonNull Player getPlayer() {
         return player;
     }
 
@@ -60,7 +60,7 @@ public class BuildToolPlaceBlockEvent extends Event {
      * Get the {@link Block} that was modified.
      * @return The {@link Block} that was modified.
      */
-    public @NotNull Block getBlock() {
+    public @NonNull Block getBlock() {
         return block;
     }
 
@@ -69,7 +69,7 @@ public class BuildToolPlaceBlockEvent extends Event {
      * @apiNote This is a snapshot of the BlockState, not a live BlockState.
      * @return The {@link BlockState} of the block before it was modified.
      */
-    public @NotNull BlockState getBlockState() {
+    public @NonNull BlockState getBlockState() {
         return blockState;
     }
 
@@ -77,7 +77,7 @@ public class BuildToolPlaceBlockEvent extends Event {
      * Get the {@link HandlerList} for this event.
      * @return A {@link HandlerList}.
      */
-    public static @NotNull HandlerList getHandlerList() {
+    public static @NonNull HandlerList getHandlerList() {
         return HANDLERS;
     }
 
@@ -86,7 +86,7 @@ public class BuildToolPlaceBlockEvent extends Event {
      * @return A {@link HandlerList}.
      */
     @Override
-    public @NotNull HandlerList getHandlers() {
+    public @NonNull HandlerList getHandlers() {
         return HANDLERS;
     }
 }

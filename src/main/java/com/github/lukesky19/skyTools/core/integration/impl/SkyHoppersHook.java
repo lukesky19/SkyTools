@@ -1,26 +1,43 @@
+/*
+    SkyTools adds new unique tools to the game.
+    Copyright (C) 2026 lukeskywlker19
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
 package com.github.lukesky19.skyTools.core.integration.impl;
 
 import com.github.lukesky19.skyHoppers.SkyHoppersAPI;
 import com.github.lukesky19.skyTools.core.integration.Hook;
-import com.github.lukesky19.skylib.api.common.abstracts.SkyPlugin;
+import com.github.lukesky19.skylib.paper.api.plugin.SkyPlugin;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * This class manages interfacing with SkyHoppers.
  */
 public class SkyHoppersHook implements Hook {
-    private final @NotNull SkyPlugin plugin;
+    private final @NonNull SkyPlugin plugin;
     private @Nullable SkyHoppersAPI skyHoppersAPI;
 
     /**
      * Constructor
      * @param plugin A {@link SkyPlugin} instance.
      */
-    public SkyHoppersHook(@NotNull SkyPlugin plugin) {
+    public SkyHoppersHook(@NonNull SkyPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -29,9 +46,9 @@ public class SkyHoppersHook implements Hook {
      */
     @Override
     public void initialize() {
-        @Nullable Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("SkyPlayTime");
+        Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("SkyPlayTime");
         if(plugin != null && plugin.isEnabled()) {
-            @Nullable RegisteredServiceProvider<SkyHoppersAPI> rsp = this.plugin.getServer().getServicesManager().getRegistration(SkyHoppersAPI.class);
+            RegisteredServiceProvider<SkyHoppersAPI> rsp = this.plugin.getServer().getServicesManager().getRegistration(SkyHoppersAPI.class);
             if(rsp != null) {
                 skyHoppersAPI = rsp.getProvider();
             }
@@ -52,7 +69,7 @@ public class SkyHoppersHook implements Hook {
      * @param itemStack The {@link ItemStack}.
      * @return true if a SkyHopper, false if not.
      */
-    public boolean isSkyHopper(@NotNull ItemStack itemStack) {
+    public boolean isSkyHopper(@NonNull ItemStack itemStack) {
         if(skyHoppersAPI == null) return false;
 
         return skyHoppersAPI.isItemStackSkyHopper(itemStack);
