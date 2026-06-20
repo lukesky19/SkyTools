@@ -27,6 +27,7 @@ import com.github.lukesky19.skyTools.core.configuration.manager.SettingsManager;
 import com.github.lukesky19.skyTools.core.integration.HookManager;
 import com.github.lukesky19.skyTools.core.integration.ProtectionManager;
 import com.github.lukesky19.skyTools.core.integration.impl.SkyShopHook;
+import com.github.lukesky19.skyTools.core.listener.CraftListener;
 import com.github.lukesky19.skyTools.core.listener.ItemSoldListener;
 import com.github.lukesky19.skyTools.core.task.TaskManager;
 import com.github.lukesky19.skyTools.mobTool.configuration.MobCaptureToolConfigurationManager;
@@ -98,6 +99,7 @@ public final class SkyTools extends SkyPlugin {
             pluginManager.registerEvents(new ItemSoldListener(buildToolManager, mobCaptureToolManager), this);
         }
         pluginManager.registerEvents(new MobSpawnListener(mobCaptureToolManager, hookManager), this);
+        pluginManager.registerEvents(new CraftListener(buildToolManager, mobCaptureToolManager), this);
 
         // Reload the plugin
         reload();

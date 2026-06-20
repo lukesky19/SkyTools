@@ -19,17 +19,20 @@ package com.github.lukesky19.skyTools.core.listener;
 
 import com.github.lukesky19.skyTools.buildTool.tool.BuildToolManager;
 import com.github.lukesky19.skyTools.mobTool.tool.MobCaptureToolManager;
-import com.github.lukesky19.skyshop.api.event.ItemPreSellEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
 
+import java.util.Arrays;
+
 /**
- * This class listens to when an item is sold through SkyShop and prevents the selling of tools.
+ * This class listens to when an item is crafted prevents the crafting if a tool is in the crafting matrix.
  */
-public class ItemSoldListener implements Listener {
+public class CraftListener implements Listener {
     private final @NonNull BuildToolManager buildToolManager;
     private final @NonNull MobCaptureToolManager mobCaptureToolManager;
 
@@ -38,7 +41,7 @@ public class ItemSoldListener implements Listener {
      * @param buildToolManager A {@link BuildToolManager} instance.
      * @param mobCaptureToolManager A {@link MobCaptureToolManager} instance.
      */
-    public ItemSoldListener(
+    public CraftListener(
             @NonNull BuildToolManager buildToolManager,
             @NonNull MobCaptureToolManager mobCaptureToolManager) {
         this.buildToolManager = buildToolManager;
@@ -46,15 +49,17 @@ public class ItemSoldListener implements Listener {
     }
 
     /**
-     * Listens for an {@link ItemPreSellEvent} and cancels it if the item is any tool.
-     * @param itemSoldEvent An {@link ItemPreSellEvent}.
+     * Listens for an {@link CraftItemEvent} and cancels it if the crafting matrix contains any tools.
+     * @param craftItemEvent An {@link CraftItemEvent}.
      */
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onItemSold(ItemPreSellEvent itemSoldEvent) {
-        ItemStack itemStack = itemSoldEvent.getItemStack();
+    public void onItemCraft(CraftItemEvent craftItemEvent) {
+        CraftingInventory craftingInventory = craftItemEvent.getInventory();
+        ItemStack[] inputs = craftingInventory.getMatrix();
 
-        if(buildToolManager.isBuildTool(itemStack) || mobCaptureToolManager.isMobCaptureTool(itemStack)) {
-            itemSoldEvent.setCancelled(true);
+        if(Arrays.stream(inputs).anyMatch(itemStack ->
+                buildToolManager.isBuildTool(itemStack) || mobCaptureToolManager.isMobCaptureTool(itemStack))) {
+            craftItemEvent.setCancelled(true);
         }
     }
 }
