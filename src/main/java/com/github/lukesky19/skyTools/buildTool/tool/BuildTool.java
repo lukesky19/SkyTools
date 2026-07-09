@@ -33,6 +33,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -321,7 +322,12 @@ public class BuildTool extends Tool {
         if(!position1.getWorld().getName().equals(position2.getWorld().getName())) return BuildToolResult.POSITIONS_DIFFERENT_WORLDS;
         if(material == null) return BuildToolResult.MATERIAL_NOT_SET;
         if(!material.isBlock()) return BuildToolResult.MATERIAL_NOT_BLOCK;
-        if(!player.getInventory().contains(material)) return BuildToolResult.PLAYER_LACKS_MATERIALS;
+
+        // Only check inventory if in a non-creative game mode.
+        if(!player.getGameMode().equals(GameMode.CREATIVE)) {
+            if(!player.getInventory().contains(material)) return BuildToolResult.PLAYER_LACKS_MATERIALS;
+        }
+
         BuildToolConfig buildToolConfig = buildToolConfigurationManager.getConfiguration();
         if(buildToolConfig == null) return BuildToolResult.BUILD_TOOL_CONFIG_INVALID;
         if(buildToolConfig.restrictedWorlds().contains(position1.getWorld().getName())) return BuildToolResult.WORLD_NOT_ALLOWED;

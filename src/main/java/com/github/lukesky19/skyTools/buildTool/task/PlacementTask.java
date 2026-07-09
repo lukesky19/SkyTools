@@ -26,6 +26,7 @@ import com.github.lukesky19.skyTools.core.integration.ProtectionManager;
 import com.github.lukesky19.skyTools.core.integration.impl.RoseStackerHook;
 import com.github.lukesky19.skyTools.core.integration.impl.SkyHoppersHook;
 import dev.rosewood.rosestacker.nms.spawner.SpawnerType;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -128,47 +129,53 @@ public class PlacementTask extends BukkitRunnable {
                     continue;
                 }
 
-                // Attempt to find an item in the inventory
-                boolean foundItem = false;
-                for(int i = 0; i < invSize; i++) {
-                    if(i >= 36 && i <= 39) {
-                        continue;
-                    }
-
-                    ItemStack invStack = inventory.getItem(i);
-                    if(invStack == null || invStack.isEmpty() || !invStack.getType().equals(placementMaterial)) {
-                        continue;
-                    }
-
-                    // Skip SkyHoppers
-                    if(skyHoppersHook.isHooked()) {
-                        if(skyHoppersHook.isSkyHopper(invStack)) continue;
-                    }
-
-                    if(roseStackerHook.isHooked()) {
-                        if(roseStackerHook.isStacked(invStack)) {
-                            if(!processStackedItemStack(player, block, placementMaterial, inventory, invStack, i)) continue;
-                        } else {
-                            if(!processNonStackedItemStack(player, block, placementMaterial, inventory, invStack, i)) continue;
+                // Only do inventory checks if in a non-creative game mode.
+                if(!player.getGameMode().equals(GameMode.CREATIVE)) {
+                    // Attempt to find an item in the inventory
+                    boolean foundItem = false;
+                    for(int i = 0; i < invSize; i++) {
+                        if(i >= 36 && i <= 39) {
+                            continue;
                         }
-                    } else {
-                        if(!processNonStackedItemStack(player, block, placementMaterial, inventory, invStack, i)) continue;
+
+                        ItemStack invStack = inventory.getItem(i);
+                        if(invStack == null || invStack.isEmpty() || !invStack.getType().equals(placementMaterial)) {
+                            continue;
+                        }
+
+                        // Skip SkyHoppers
+                        if(skyHoppersHook.isHooked()) {
+                            if (skyHoppersHook.isSkyHopper(invStack)) continue;
+                        }
+
+                        if(roseStackerHook.isHooked()) {
+                            if(roseStackerHook.isStacked(invStack)) {
+                                if(!processStackedItemStack(player, block, placementMaterial, inventory, invStack, i))
+                                    continue;
+                            } else {
+                                if(!processNonStackedItemStack(player, block, placementMaterial, inventory, invStack, i))
+                                    continue;
+                            }
+                        } else {
+                            if(!processNonStackedItemStack(player, block, placementMaterial, inventory, invStack, i))
+                                continue;
+                        }
+
+                        // Increment count
+                        count++;
+
+                        // Mark that item was found
+                        foundItem = true;
+
+                        // No need to continue the search after a valid item was found.
+                        break;
                     }
 
-                    // Increment count
-                    count++;
-
-                    // Mark that item was found
-                    foundItem = true;
-
-                    // No need to continue the search after a valid item was found.
-                    break;
-                }
-
-                // Remove the queued placement if the player lacks the required items
-                if(!foundItem) {
-                    blockPlacementQueue.remove();
-                    break;
+                    // Remove the queued placement if the player lacks the required items
+                    if(!foundItem) {
+                        blockPlacementQueue.remove();
+                        break;
+                    }
                 }
             }
 
