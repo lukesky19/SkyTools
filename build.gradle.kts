@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.github.lukesky19"
-version = "0.2.1.0"
+version = "0.2.2.0"
 
 repositories {
     mavenCentral()
@@ -18,18 +18,21 @@ repositories {
 
 dependencies {
     // Paper
-    compileOnly("io.papermc.paper:paper-api:26.1.2.build.+")
+    compileOnly("io.papermc.paper:paper-api:26.2.build.+")
 
     // SkyLib
-    compileOnly("com.github.lukesky19:SkyLib:2.0.0.0")
+    compileOnly("com.github.lukesky19:SkyLib:2.0.2.0")
 
     // Integration
     compileOnly("world.bentobox:bentobox:2.7.0-SNAPSHOT")
-    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.16")
-    compileOnly("dev.rosewood:rosestacker:1.5.37")
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.17-SNAPSHOT") {
+        exclude(group = "com.google.code.gson")
+        exclude(group = "com.google.guava")
+    }
+    compileOnly("dev.rosewood:rosestacker:1.5.41")
     compileOnly("dev.lone:api-itemsadder:4.0.10")
-    compileOnly("com.github.lukesky19:SkyHoppers:1.2.0.0")
-    compileOnly("com.github.lukesky19:SkyShop:3.0.0.0")
+    compileOnly("com.github.lukesky19:SkyHoppers:1.4.1.0")
+    compileOnly("com.github.lukesky19:SkyShop:3.3.1.0")
 }
 
 java {
