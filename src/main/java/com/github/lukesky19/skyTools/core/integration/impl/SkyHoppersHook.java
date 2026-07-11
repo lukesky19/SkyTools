@@ -46,7 +46,7 @@ public class SkyHoppersHook implements Hook {
      */
     @Override
     public void initialize() {
-        Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("SkyPlayTime");
+        Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("SkyHoppers");
         if(plugin != null && plugin.isEnabled()) {
             RegisteredServiceProvider<SkyHoppersAPI> rsp = this.plugin.getServer().getServicesManager().getRegistration(SkyHoppersAPI.class);
             if(rsp != null) {
