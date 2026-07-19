@@ -28,6 +28,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * This class listens to when an item is crafted prevents the crafting if a tool is in the crafting matrix.
@@ -57,7 +58,7 @@ public class CraftListener implements Listener {
         CraftingInventory craftingInventory = craftItemEvent.getInventory();
         ItemStack[] inputs = craftingInventory.getMatrix();
 
-        if(Arrays.stream(inputs).anyMatch(itemStack ->
+        if(Arrays.stream(inputs).filter(Objects::nonNull).anyMatch(itemStack ->
                 buildToolManager.isBuildTool(itemStack) || mobCaptureToolManager.isMobCaptureTool(itemStack))) {
             craftItemEvent.setCancelled(true);
         }
